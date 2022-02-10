@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>文章归档 | syz&#39;sinfo</title>
+<title>Es6：set方法 | syz&#39;sinfo</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,12 @@
 
 
 
-    <meta name="description" content="温故而知新">
+    <meta name="description" content="1.set是一种数据结构，可以认为是数组；
+2.set的四种操作方法：
+a.add(value),用于向数组中添加元素，返回set结构本身；
+b.delete(value),删除元素，返回一个bool值，表示是否删除成功；
+c.has(va..." />
+    <meta name="keywords" content="Set" />
   </head>
   <body>
     <div id="app" class="main">
@@ -88,47 +93,78 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          
+          <div class="post-detail">
+            <h2 class="post-title">Es6：set方法</h2>
+            <div class="post-date">2022-02-10</div>
+            
+            <div class="post-content" v-pre>
+              <p>1.set是一种数据结构，可以认为是数组；<br>
+2.set的四种操作方法：<br>
+a.add(value),用于向数组中添加元素，返回set结构本身；<br>
+b.delete(value),删除元素，返回一个bool值，表示是否删除成功；<br>
+c.has(value),返回一个bool值表示set中是否含有本元素；<br>
+d.clear(),清除所有的set成员，没有返回值；<br>
+3.set里面添加的对象即使相同也是不相等的，例如：set.add({});  set.add({});   可以同时存在；<br>
+4.Set.prototype.constructor，构造函数，默认是set函数；<br>
+5.Set.prototype.size,返回set实例的成员总数；<br>
+6.Array.from方法可以将set结构转化为数组；<br>
+const set = new Set([1,2,3,4,5,6,23,13,1,1,1]);<br>
+[...set]<br>
+console.log(set);<br>
+//set内含元素的个数<br>
+console.log(set.size);<br>
+console.log([...set]);<br>
+//set添加元素<br>
+set.add(11112);<br>
+//删除元素<br>
+set.delete(23);<br>
+//是否存在某个元素<br>
+set.has(13);<br>
+console.log(set.has(13));<br>
+//清除所有成员<br>
+set.clear();<br>
+console.log(set);<br>
+//set的四个遍历方法<br>
+let set1 = new Set(['1','2','3']);<br>
+for(let key of set1.keys()){<br>
+console.log(key);<br>
+}<br>
+for(let value of set1.values()){<br>
+console.log(value);<br>
+}<br>
+for(let item of set1.entries()){<br>
+console.log(item);<br>
+}<br>
+//for...of....<br>
+let myArr = new Set([1,2,3,4,5]);<br>
+for(let x of myArr){<br>
+console.log(x);<br>
+}</p>
 
-          <h2 class="archives-title">文章归档</h2>
-          <div class="archives-container">
+            </div>
             
-              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2022</h2>
-              
+              <div class="tag-container">
                 
-                  <article class="post">
-                    <a href="https://2921455327.github.io/post/es6set-fang-fa/">
-                      <h2 class="post-title">
-                        Es6：set方法
-                      </h2>
-                    </a>
-                  </article>
+                  <a href="https://2921455327.github.io/tag/es6set-fang-fa/" class="tag">
+                    Set
+                  </a>
                 
-              
-                
-              
+              </div>
             
-              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2018</h2>
-              
-                
-              
-                
-                  <article class="post">
-                    <a href="https://2921455327.github.io/post/hello-gridea/">
-                      <h2 class="post-title">
-                        Hello Gridea
-                      </h2>
-                    </a>
-                  </article>
-                
-              
             
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://2921455327.github.io/post/hello-gridea/">
+                  <h3 class="post-title">
+                    Hello Gridea
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
           </div>
-
-          <div class="pagination-container">
-  
-  
-</div>
 
         </div>
       </div>
