@@ -8,9 +8,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1644477558911">
+<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1644547549331">
 <link rel="stylesheet" href="https://2921455327.github.io/styles/main.css">
 
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
 
 
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -32,7 +38,7 @@ c.has(va..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://2921455327.github.io">
-        <img src="https://2921455327.github.io/images/avatar.png?v=1644477558911" class="site-logo">
+        <img src="https://2921455327.github.io/images/avatar.png?v=1644547549331" class="site-logo">
         <h1 class="site-title">syz&#39;sinfo</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -163,6 +169,12 @@ console.log(x);<br>
             
 
             
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
 
           </div>
 
@@ -185,6 +197,29 @@ var app = new Vue({
 </script>
 
 
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '5ec435a980c7ee73d2f9',
+        clientSecret: 'You need a client secret to authenticate as the application to the API.',
+        repo: '2921455327.github.io',
+        owner: '2921455327',
+        admin: ['2921455327'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
 
 
 
