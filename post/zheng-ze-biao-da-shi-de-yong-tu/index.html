@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1647052200151">
+<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1647052555938">
 <link rel="stylesheet" href="https://2921455327.github.io/styles/main.css">
 
 
@@ -30,7 +30,7 @@
 
 &lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
 const value = /[a-zA-Z\_\$][0-9a-zA..." />
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="正则表达式" />
   </head>
   <body>
     <div id="app" class="main">
@@ -39,7 +39,7 @@ const value = /[a-zA-Z\_\$][0-9a-zA..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://2921455327.github.io">
-        <img src="https://2921455327.github.io/images/avatar.png?v=1647052200151" class="site-logo">
+        <img src="https://2921455327.github.io/images/avatar.png?v=1647052555938" class="site-logo">
         <h1 class="site-title">syz&#39;sinfo</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -132,6 +132,9 @@ const data=dataInput.split(reg)
 </code></pre>
 <p>这样写，程序的容错性就会明显提升很多</p>
 <h2 id="2提取字符串信息">2.提取字符串信息</h2>
+<blockquote>
+<p>使用exec方法最终得到的是一个数组，里面存放字符串中与正则表达式中匹配的内容，我们可以通过这种方法便捷的提取字符串中的内容</p>
+</blockquote>
 <pre><code>const re = /^(\d+)(0*)$/;
 re.exec('12300')  
 const reg = /^(\d+?)(0*)$/;
@@ -158,12 +161,20 @@ reg.exec('12300')
 
             </div>
             
+              <div class="tag-container">
+                
+                  <a href="https://2921455327.github.io/tag/THpRLDT9M/" class="tag">
+                    正则表达式
+                  </a>
+                
+              </div>
+            
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://2921455327.github.io/post/zheng-ze-biao-da-shi/">
+                <a href="https://2921455327.github.io/post/html-yu-fa/">
                   <h3 class="post-title">
-                    正则表达式
+                    HTML语法
                   </h3>
                 </a>
               </div>

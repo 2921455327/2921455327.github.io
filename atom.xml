@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2921455327.github.io</id>
     <title>syz&apos;sinfo</title>
-    <updated>2022-03-12T02:30:14.311Z</updated>
+    <updated>2022-03-12T02:36:08.231Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2921455327.github.io"/>
     <link rel="self" href="https://2921455327.github.io/atom.xml"/>
@@ -43,6 +43,9 @@ const data=dataInput.split(reg)
 </code></pre>
 <p>这样写，程序的容错性就会明显提升很多</p>
 <h2 id="2提取字符串信息">2.提取字符串信息</h2>
+<blockquote>
+<p>使用exec方法最终得到的是一个数组，里面存放字符串中与正则表达式中匹配的内容，我们可以通过这种方法便捷的提取字符串中的内容</p>
+</blockquote>
 <pre><code>const re = /^(\d+)(0*)$/;
 re.exec('12300')  
 const reg = /^(\d+?)(0*)$/;
@@ -66,28 +69,6 @@ reg.exec('12300')
 &gt;&gt;&gt;str.replace(/\d+/g,&quot;*&quot;)
 // '$*'
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[正则表达式]]></title>
-        <id>https://2921455327.github.io/post/zheng-ze-biao-da-shi/</id>
-        <link href="https://2921455327.github.io/post/zheng-ze-biao-da-shi/">
-        </link>
-        <updated>2022-03-12T01:32:07.000Z</updated>
-        <content type="html"><![CDATA[<p>#一，什么是正则表达式<br>
-正则表达式的概念：</p>
-<blockquote>
-<p>计算机科学的一个概念。正则表达式通常被用来检索，替换那些符合某个模式(规则)的文本<br>
-在JS中，正则表达式属于对象的一种：</p>
-</blockquote>
-<pre><code>typeof /\d+/
-&quot;object&quot;
-Object.prototype.toString.call(/\d+/)
-//&quot;[object RegExp]&quot;
-</code></pre>
-<p>正则对象有两个常用的属性：<br>
--flags:该正则对象的标志<br>
--lastIndex:下一次开始匹配的起点</p>
 ]]></content>
     </entry>
     <entry>
