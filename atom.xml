@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2921455327.github.io</id>
     <title>syz&apos;sinfo</title>
-    <updated>2022-03-12T02:55:29.550Z</updated>
+    <updated>2022-03-12T03:32:51.037Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2921455327.github.io"/>
     <link rel="self" href="https://2921455327.github.io/atom.xml"/>
@@ -77,10 +77,12 @@ reg.exec('12300')
         <link href="https://2921455327.github.io/post/html-yu-fa/">
         </link>
         <updated>2022-02-10T07:14:59.000Z</updated>
-        <content type="html"><![CDATA[<p>标签和属性不区分大小写，推荐小写<br>
-空标签可以不闭合，比如input，meta<br>
-属性值推荐用双引号包裹<br>
-某些属性值可以省略，比如required，readonly</p>
+        <content type="html"><![CDATA[<ul>
+<li>标签和属性不区分大小写，推荐小写</li>
+<li>空标签可以不闭合，比如input，meta</li>
+<li>属性值推荐用双引号包裹</li>
+<li>某些属性值可以省略，比如required，readonly</li>
+</ul>
 ]]></content>
     </entry>
     <entry>
@@ -91,9 +93,9 @@ reg.exec('12300')
         <updated>2022-02-10T06:54:28.000Z</updated>
         <content type="html"><![CDATA[<p>1.解决GUI（图形界面下的）人机问题<br>
 2.跨终端<br>
-pc/移动浏览器<br>
-客户端/小程序<br>
-VR/AR等<br>
+- pc/移动浏览器<br>
+- 客户端/小程序<br>
+- VR/AR等<br>
 3.Web技术栈<br>
 🚩前端工程师是使用Web技术栈解决多端图形用户界面交互问题的工程师。</p>
 ]]></content>
@@ -104,48 +106,50 @@ VR/AR等<br>
         <link href="https://2921455327.github.io/post/es6set-fang-fa/">
         </link>
         <updated>2022-02-10T02:21:43.000Z</updated>
-        <content type="html"><![CDATA[<p>1.set是一种数据结构，可以认为是数组；<br>
-2.set的四种操作方法：<br>
-a.add(value),用于向数组中添加元素，返回set结构本身；<br>
-b.delete(value),删除元素，返回一个bool值，表示是否删除成功；<br>
-c.has(value),返回一个bool值表示set中是否含有本元素；<br>
-d.clear(),清除所有的set成员，没有返回值；<br>
-3.set里面添加的对象即使相同也是不相等的，例如：set.add({});  set.add({});   可以同时存在；<br>
-4.Set.prototype.constructor，构造函数，默认是set函数；<br>
-5.Set.prototype.size,返回set实例的成员总数；<br>
-6.Array.from方法可以将set结构转化为数组；</p>
-<pre><code class="language-JavaScript">const set = new Set([1,2,3,4,5,6,23,13,1,1,1]);
-[...set]
-console.log(set);
-//set内含元素的个数
-console.log(set.size);
-console.log([...set]);
-//set添加元素
-set.add(11112);
-//删除元素
-set.delete(23);
-//是否存在某个元素
-set.has(13);
-console.log(set.has(13));
-//清除所有成员
-set.clear();
-console.log(set);
-//set的四个遍历方法
-let set1 = new Set(['1','2','3']);
-for(let key of set1.keys()){
-    console.log(key);
-}
-for(let value of set1.values()){
-    console.log(value);
-}
-for(let item of set1.entries()){
-    console.log(item);
-}
-//for...of....
-let myArr = new Set([1,2,3,4,5]);
-for(let x of myArr){
-    console.log(x);
-}
+        <content type="html"><![CDATA[<h2 id="1set的一些重要的特性">1.set的一些重要的特性</h2>
+<blockquote>
+<p>(1)Set.prototype.constructor，构造函数，默认是set函数<br>
+(2)Set.prototype.size,返回set实例的成员总数<br>
+(3)set是一种数据结构，是伪数组，无法访问长度，可以Array.from方法可以将set结构转化数组，再访问它的长度；<br>
+(4)set里面添加的对象即使相同也是不相等的，例如：set.add({a:1});  set.add({a:1});   可以同时存在；</p>
+</blockquote>
+<h2 id="2set的四种操作方法">2.set的四种操作方法：</h2>
+<pre><code>
+        // 添加元素
+            add(value),用于向数组中添加元素，返回set结构本身；
+            set.add(11112);
+        //删除元素
+            delete(value),删除元素，返回一个bool值，表示是否删除成功；
+            set.delete(23);
+        //是否存在某个元素
+            has(value),返回一个bool值表示set中是否含有本元素；
+            set.has(13);
+            console.log(set.has(13));
+        //清除所有成员
+            clear(),清除所有的set成员，没有返回值；
+            set.clear();
+            console.log(set);
+</code></pre>
+<h2 id="4set的遍历方法">4.set的遍历方法</h2>
+<pre><code>
+        //遍历key
+            let set1 = new Set(['1','2','3']);
+            for(let key of set1.keys()){
+                console.log(key);
+            }
+        //遍历value
+            for(let value of set1.values()){
+                console.log(value);
+            }
+        //遍历item
+            for(let item of set1.entries()){
+                console.log(item);
+            }
+        // for...of..遍历
+            let myArr = new Set([1,2,3,4,5]);
+            for(let x of myArr){
+                console.log(x);
+            }
 </code></pre>
 ]]></content>
     </entry>

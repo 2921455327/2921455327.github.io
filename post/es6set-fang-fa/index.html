@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1647053727156">
+<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1647055875896">
 <link rel="stylesheet" href="https://2921455327.github.io/styles/main.css">
 
 
@@ -24,11 +24,11 @@
 
 
 
-    <meta name="description" content="1.set是一种数据结构，可以认为是数组；
-2.set的四种操作方法：
-a.add(value),用于向数组中添加元素，返回set结构本身；
-b.delete(value),删除元素，返回一个bool值，表示是否删除成功；
-c.has(va..." />
+    <meta name="description" content="1.set的一些重要的特性
+
+(1)Set.prototype.constructor，构造函数，默认是set函数
+(2)Set.prototype.size,返回set实例的成员总数
+(3)set是一种数据结构，是伪数组，无法访问长度，可..." />
     <meta name="keywords" content="Set" />
   </head>
   <body>
@@ -38,7 +38,7 @@ c.has(va..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://2921455327.github.io">
-        <img src="https://2921455327.github.io/images/avatar.png?v=1647053727156" class="site-logo">
+        <img src="https://2921455327.github.io/images/avatar.png?v=1647055875896" class="site-logo">
         <h1 class="site-title">syz&#39;sinfo</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -107,48 +107,50 @@ c.has(va..." />
               </div>
             
             <div class="post-content" v-pre>
-              <p>1.set是一种数据结构，可以认为是数组；<br>
-2.set的四种操作方法：<br>
-a.add(value),用于向数组中添加元素，返回set结构本身；<br>
-b.delete(value),删除元素，返回一个bool值，表示是否删除成功；<br>
-c.has(value),返回一个bool值表示set中是否含有本元素；<br>
-d.clear(),清除所有的set成员，没有返回值；<br>
-3.set里面添加的对象即使相同也是不相等的，例如：set.add({});  set.add({});   可以同时存在；<br>
-4.Set.prototype.constructor，构造函数，默认是set函数；<br>
-5.Set.prototype.size,返回set实例的成员总数；<br>
-6.Array.from方法可以将set结构转化为数组；</p>
-<pre><code class="language-JavaScript">const set = new Set([1,2,3,4,5,6,23,13,1,1,1]);
-[...set]
-console.log(set);
-//set内含元素的个数
-console.log(set.size);
-console.log([...set]);
-//set添加元素
-set.add(11112);
-//删除元素
-set.delete(23);
-//是否存在某个元素
-set.has(13);
-console.log(set.has(13));
-//清除所有成员
-set.clear();
-console.log(set);
-//set的四个遍历方法
-let set1 = new Set(['1','2','3']);
-for(let key of set1.keys()){
-    console.log(key);
-}
-for(let value of set1.values()){
-    console.log(value);
-}
-for(let item of set1.entries()){
-    console.log(item);
-}
-//for...of....
-let myArr = new Set([1,2,3,4,5]);
-for(let x of myArr){
-    console.log(x);
-}
+              <h2 id="1set的一些重要的特性">1.set的一些重要的特性</h2>
+<blockquote>
+<p>(1)Set.prototype.constructor，构造函数，默认是set函数<br>
+(2)Set.prototype.size,返回set实例的成员总数<br>
+(3)set是一种数据结构，是伪数组，无法访问长度，可以Array.from方法可以将set结构转化数组，再访问它的长度；<br>
+(4)set里面添加的对象即使相同也是不相等的，例如：set.add({a:1});  set.add({a:1});   可以同时存在；</p>
+</blockquote>
+<h2 id="2set的四种操作方法">2.set的四种操作方法：</h2>
+<pre><code>
+        // 添加元素
+            add(value),用于向数组中添加元素，返回set结构本身；
+            set.add(11112);
+        //删除元素
+            delete(value),删除元素，返回一个bool值，表示是否删除成功；
+            set.delete(23);
+        //是否存在某个元素
+            has(value),返回一个bool值表示set中是否含有本元素；
+            set.has(13);
+            console.log(set.has(13));
+        //清除所有成员
+            clear(),清除所有的set成员，没有返回值；
+            set.clear();
+            console.log(set);
+</code></pre>
+<h2 id="4set的遍历方法">4.set的遍历方法</h2>
+<pre><code>
+        //遍历key
+            let set1 = new Set(['1','2','3']);
+            for(let key of set1.keys()){
+                console.log(key);
+            }
+        //遍历value
+            for(let value of set1.values()){
+                console.log(value);
+            }
+        //遍历item
+            for(let item of set1.entries()){
+                console.log(item);
+            }
+        // for...of..遍历
+            let myArr = new Set([1,2,3,4,5]);
+            for(let x of myArr){
+                console.log(x);
+            }
 </code></pre>
 
             </div>
