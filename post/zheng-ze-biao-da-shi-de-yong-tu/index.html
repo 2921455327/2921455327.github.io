@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>HTML语法 | syz&#39;sinfo</title>
+<title>正则表达式的用途 | syz&#39;sinfo</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,12 +24,13 @@
 
 
 
-    <meta name="description" content="标签和属性不区分大小写，推荐小写
-空标签可以不闭合，比如input，meta
-属性值推荐用双引号包裹
-某些属性值可以省略，比如required，readonly
-" />
-    <meta name="keywords" content="HTML语法" />
+    <meta name="description" content="0.判断特定字符串
+
+要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:
+
+&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
+const value = /[a-zA-Z\_\$][0-9a-zA..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -100,34 +101,69 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">HTML语法</h2>
-            <div class="post-date">2022-02-10</div>
-            
-              <div class="feature-container" style="background-image: url('https://images.unsplash.com/photo-1451226428352-cf66bf8a0317?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2553&amp;q=80')">
-              </div>
+            <h2 class="post-title">正则表达式的用途</h2>
+            <div class="post-date">2022-03-12</div>
             
             <div class="post-content" v-pre>
-              <p>标签和属性不区分大小写，推荐小写<br>
-空标签可以不闭合，比如input，meta<br>
-属性值推荐用双引号包裹<br>
-某些属性值可以省略，比如required，readonly</p>
+              <h2 id="0判断特定字符串">0.判断特定字符串</h2>
+<blockquote>
+<p>要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:</p>
+</blockquote>
+<pre><code>&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
+const value = /[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
+value.test(v)
+- test
+&gt;&gt;&gt; var value=/[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
+&gt;&gt;&gt; value.test('v')
+// true
+</code></pre>
+<h2 id="1切割字符串">1.切割字符串</h2>
+<blockquote>
+<p>在读取用户的输入的多个数据时，数据间的分隔符可能是多种多样的，有的人用一个空格，有个人用多个空格，有个人用逗号顿号分号等，而我们读取的是一整个的字符串，如何把这个字符串拆分为一个一个的数据项呢，此时正则就可以上场了</p>
+</blockquote>
+<pre><code>const reg=/[\s\,\、\。\,]+/
+const data=dataInput.split(reg)
+- test
+&gt;&gt;&gt; var reeg=/[\s\,\、\。\,]+/
+&gt;&gt;&gt; dataInput= &quot;A man, a plan, a canal: Panama&quot;
+// A man, a plan, a canal: Panama'
+&gt;&gt;&gt; dataInput.split(reeg)
+// ['A', 'man', 'a', 'plan', 'a', 'canal:', 'Panama']
+</code></pre>
+<p>这样写，程序的容错性就会明显提升很多</p>
+<h2 id="2提取字符串信息">2.提取字符串信息</h2>
+<pre><code>const re = /^(\d+)(0*)$/;
+re.exec('12300')  
+const reg = /^(\d+?)(0*)$/;
+reg.exec('12300')
+- test
+&gt;&gt;&gt; const re = /^(\d+)(0*)$/;
+&gt;&gt;&gt; re.exec('12300')
+// ['12300', '12300', '', index: 0, input: '12300', groups: undefined]
+&gt;&gt;&gt; const reg = /^(\d+?)(0*)$/;
+&gt;&gt;&gt; reg.exec('12300')
+// ['12300', '123', '00', index: 0, input: '12300', groups: undefined]
+</code></pre>
+<h2 id="3替换字符串">3.替换字符串</h2>
+<blockquote>
+<p>使用string对象的replace方法可以对字符串中的某一部分进行替换，使用正则字符串后，可以方便的选择字符串中的特定字符，如显示客户信息时要将字符串中的金额数字替换为&quot;*&quot;</p>
+</blockquote>
+<pre><code>str.replace(/\d+/,&quot;*&quot;);
+- test
+&gt;&gt;&gt;str = &quot;$1&quot;
+// '$1'
+&gt;&gt;&gt;str.replace(/\d+/g,&quot;*&quot;)
+// '$*'
+</code></pre>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://2921455327.github.io/tag/IbrjSo_Iw/" class="tag">
-                    HTML语法
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://2921455327.github.io/post/qian-duan-shi-shi-me/">
+                <a href="https://2921455327.github.io/post/zheng-ze-biao-da-shi/">
                   <h3 class="post-title">
-                    前端是什么？
+                    正则表达式
                   </h3>
                 </a>
               </div>

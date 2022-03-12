@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2921455327.github.io</id>
     <title>syz&apos;sinfo</title>
-    <updated>2022-02-24T09:03:48.372Z</updated>
+    <updated>2022-03-12T02:30:02.114Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2921455327.github.io"/>
     <link rel="self" href="https://2921455327.github.io/atom.xml"/>
@@ -10,6 +10,86 @@
     <logo>https://2921455327.github.io/images/avatar.png</logo>
     <icon>https://2921455327.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, syz&apos;sinfo</rights>
+    <entry>
+        <title type="html"><![CDATA[正则表达式的用途]]></title>
+        <id>https://2921455327.github.io/post/zheng-ze-biao-da-shi-de-yong-tu/</id>
+        <link href="https://2921455327.github.io/post/zheng-ze-biao-da-shi-de-yong-tu/">
+        </link>
+        <updated>2022-03-12T01:32:07.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="0判断特定字符串">0.判断特定字符串</h2>
+<blockquote>
+<p>要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:</p>
+</blockquote>
+<pre><code>&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
+const value = /[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
+value.test(v)
+- test
+&gt;&gt;&gt; var value=/[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
+&gt;&gt;&gt; value.test('v')
+// true
+</code></pre>
+<h2 id="1切割字符串">1.切割字符串</h2>
+<blockquote>
+<p>在读取用户的输入的多个数据时，数据间的分隔符可能是多种多样的，有的人用一个空格，有个人用多个空格，有个人用逗号顿号分号等，而我们读取的是一整个的字符串，如何把这个字符串拆分为一个一个的数据项呢，此时正则就可以上场了</p>
+</blockquote>
+<pre><code>const reg=/[\s\,\、\。\,]+/
+const data=dataInput.split(reg)
+- test
+&gt;&gt;&gt; var reeg=/[\s\,\、\。\,]+/
+&gt;&gt;&gt; dataInput= &quot;A man, a plan, a canal: Panama&quot;
+// A man, a plan, a canal: Panama'
+&gt;&gt;&gt; dataInput.split(reeg)
+// ['A', 'man', 'a', 'plan', 'a', 'canal:', 'Panama']
+</code></pre>
+<p>这样写，程序的容错性就会明显提升很多</p>
+<h2 id="2提取字符串信息">2.提取字符串信息</h2>
+<pre><code>const re = /^(\d+)(0*)$/;
+re.exec('12300')  
+const reg = /^(\d+?)(0*)$/;
+reg.exec('12300')
+- test
+&gt;&gt;&gt; const re = /^(\d+)(0*)$/;
+&gt;&gt;&gt; re.exec('12300')
+// ['12300', '12300', '', index: 0, input: '12300', groups: undefined]
+&gt;&gt;&gt; const reg = /^(\d+?)(0*)$/;
+&gt;&gt;&gt; reg.exec('12300')
+// ['12300', '123', '00', index: 0, input: '12300', groups: undefined]
+</code></pre>
+<h2 id="3替换字符串">3.替换字符串</h2>
+<blockquote>
+<p>使用string对象的replace方法可以对字符串中的某一部分进行替换，使用正则字符串后，可以方便的选择字符串中的特定字符，如显示客户信息时要将字符串中的金额数字替换为&quot;*&quot;</p>
+</blockquote>
+<pre><code>str.replace(/\d+/,&quot;*&quot;);
+- test
+&gt;&gt;&gt;str = &quot;$1&quot;
+// '$1'
+&gt;&gt;&gt;str.replace(/\d+/g,&quot;*&quot;)
+// '$*'
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[正则表达式]]></title>
+        <id>https://2921455327.github.io/post/zheng-ze-biao-da-shi/</id>
+        <link href="https://2921455327.github.io/post/zheng-ze-biao-da-shi/">
+        </link>
+        <updated>2022-03-12T01:32:07.000Z</updated>
+        <content type="html"><![CDATA[<p>#一，什么是正则表达式<br>
+正则表达式的概念：</p>
+<blockquote>
+<p>计算机科学的一个概念。正则表达式通常被用来检索，替换那些符合某个模式(规则)的文本<br>
+在JS中，正则表达式属于对象的一种：</p>
+</blockquote>
+<pre><code>typeof /\d+/
+&quot;object&quot;
+Object.prototype.toString.call(/\d+/)
+//&quot;[object RegExp]&quot;
+</code></pre>
+<p>正则对象有两个常用的属性：<br>
+-flags:该正则对象的标志<br>
+-lastIndex:下一次开始匹配的起点</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[HTML语法]]></title>
         <id>https://2921455327.github.io/post/html-yu-fa/</id>
