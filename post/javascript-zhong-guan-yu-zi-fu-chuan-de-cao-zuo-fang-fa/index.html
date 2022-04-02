@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>正则表达式的用途 | syz&#39;sinfo</title>
+<title>JavaScript中关于字符串的操作方法 | syz&#39;sinfo</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,13 +24,15 @@
 
 
 
-    <meta name="description" content="0.判断特定字符串
+    <meta name="description" content="字符串的拼接：concat()
 
-要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:
+用于将一个或多个字符串拼接成一个新字符串
+concat()方法可以接收任意多个参数，因此可以一次性拼接多个字符串，
+concat()方法不会改变原字符串
 
-&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
-const value = /[a-zA-Z\_\$][0-9a-zA..." />
-    <meta name="keywords" content="正则表达式" />
+let string = 'hello'
+//接收..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -101,80 +103,73 @@ const value = /[a-zA-Z\_\$][0-9a-zA..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">正则表达式的用途</h2>
-            <div class="post-date">2022-03-12</div>
+            <h2 class="post-title">JavaScript中关于字符串的操作方法</h2>
+            <div class="post-date">2022-04-02</div>
             
             <div class="post-content" v-pre>
-              <h2 id="0判断特定字符串">0.判断特定字符串</h2>
+              <h3 id="字符串的拼接concat">字符串的拼接：concat()</h3>
 <blockquote>
-<p>要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:</p>
+<p>用于将一个或多个字符串拼接成一个新字符串<br>
+concat()方法可以接收任意多个参数，因此可以一次性拼接多个字符串，<br>
+concat()方法不会改变原字符串</p>
 </blockquote>
-<pre><code>&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
-const value = /[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-value.test(v)
-- test
-&gt;&gt;&gt; var value=/[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-&gt;&gt;&gt; value.test('v')
-// true
+<pre><code class="language-javascript">let string = 'hello'
+//接收一个参数
+let result = string.concat(',world')
+//接收多个参数
+let result1 = string.concat(',world',' !')
+console.log(string);// hello
+console.log(result);// hello,world
+console.log(result1);// hello,world !
 </code></pre>
-<h2 id="1切割字符串">1.切割字符串</h2>
 <blockquote>
-<p>在读取用户的输入的多个数据时，数据间的分隔符可能是多种多样的，有的人用一个空格，有个人用多个空格，有个人用逗号顿号分号等，而我们读取的是一整个的字符串，如何把这个字符串拆分为一个一个的数据项呢，此时正则就可以上场了</p>
+<p>虽然 concat()方法可以拼接字符串，但更常用的方式是使用加号操作符（+）。而且多数情况下，对于拼接多个字符串来说，使用加号更方便。</p>
 </blockquote>
-<pre><code>const reg=/[\s\,\、\。\,]+/
-const data=dataInput.split(reg)
-- test
-&gt;&gt;&gt; var reeg=/[\s\,\、\。\,]+/
-&gt;&gt;&gt; dataInput= &quot;A man, a plan, a canal: Panama&quot;
-// A man, a plan, a canal: Panama'
-&gt;&gt;&gt; dataInput.split(reeg)
-// ['A', 'man', 'a', 'plan', 'a', 'canal:', 'Panama']
+<pre><code class="language-javascript">let result = 'hello'+',world'+'!'
+console.log(result);//hello,world!
 </code></pre>
-<p>这样写，程序的容错性就会明显提升很多</p>
-<h2 id="2提取字符串信息">2.提取字符串信息</h2>
+<h3 id="字符串的截取slicesubstringsubstr">字符串的截取：slice(),substring(),substr()</h3>
 <blockquote>
-<p>使用exec方法最终得到的是一个数组，里面存放字符串中与正则表达式中匹配的内容，我们可以通过这种方法便捷的提取字符串中的内容</p>
+<ul>
+<li>3个方法都返回调用它们的字符串的一个子字符串，而且都接收一或两个参数。第一个参数表示<strong>子字符串开始的位置</strong>，对 slice()和 substring()而言，第二个参数是<strong>提取结束的位置</strong>（即该位置之前的字符会被提取出来）。对 substr()而言，第二个参数表示返回的<strong>子字符串数量。</strong></li>
+<li>任何情况下，省略第二个参数都意味着提取到<strong>字符串末尾</strong>。与 concat()方法一样，slice()、substr()<br>
+和 substring()也不会修改调用它们的字符串，而只会返回提取到的原始新字符串值。</li>
+</ul>
 </blockquote>
-<pre><code>const re = /^(\d+)(0*)$/;
-re.exec('12300')  
-const reg = /^(\d+?)(0*)$/;
-reg.exec('12300')
-- test
-&gt;&gt;&gt; const re = /^(\d+)(0*)$/;
-&gt;&gt;&gt; re.exec('12300')
-// ['12300', '12300', '', index: 0, input: '12300', groups: undefined]
-&gt;&gt;&gt; const reg = /^(\d+?)(0*)$/;
-&gt;&gt;&gt; reg.exec('12300')
-// ['12300', '123', '00', index: 0, input: '12300', groups: undefined]
+<pre><code class="language-javascript">let string = &quot;hello world&quot;; 
+console.log(string.slice(3)); // &quot;lo world&quot; 
+console.log(string.substring(3)); // &quot;lo world&quot; 
+console.log(string.substr(3)); // &quot;lo world&quot; 
+console.log(string.slice(3, 7)); // &quot;lo w&quot; 
+console.log(string.substring(3,7)); // &quot;lo w&quot; 
+console.log(string.substr(3, 7)); // &quot;lo worl&quot; 
 </code></pre>
-<h2 id="3替换字符串">3.替换字符串</h2>
 <blockquote>
-<p>使用string对象的replace方法可以对字符串中的某一部分进行替换，使用正则字符串后，可以方便的选择字符串中的特定字符，如显示客户信息时要将字符串中的金额数字替换为&quot;*&quot;</p>
+<p>如果传入的参数为负值呢？</p>
+<ul>
+<li>slice()方法将所有负值参数都当成字符串长度加上负参数值</li>
+<li>substr()方法将第一个负参数值当成字符串长度加上该值，将第二个负参数值转换为 0</li>
+<li>substring()方法会将所有负参数值都转换为 0</li>
+</ul>
 </blockquote>
-<pre><code>str.replace(/\d+/,&quot;*&quot;);
-- test
-&gt;&gt;&gt;str = &quot;$1&quot;
-// '$1'
-&gt;&gt;&gt;str.replace(/\d+/g,&quot;*&quot;)
-// '$*'
+<pre><code class="language-javascript">let string = &quot;hello world&quot;; 
+console.log(string.slice(-3)); // &quot;rld&quot; 
+console.log(string.substring(-3)); // &quot;hello world&quot; 
+console.log(string.substr(-3)); // &quot;rld&quot; 
+console.log(string.slice(3, -4)); // &quot;lo w&quot; 
+console.log(string.substring(3, -4)); // &quot;hel&quot; 
+console.log(string.substr(3, -4)); // &quot;&quot; (empty string) 
+
 </code></pre>
 
             </div>
             
-              <div class="tag-container">
-                
-                  <a href="https://2921455327.github.io/tag/_r9OxAILb/" class="tag">
-                    正则表达式
-                  </a>
-                
-              </div>
-            
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://2921455327.github.io/post/html-yu-fa/">
+                <a href="https://2921455327.github.io/post/javascript-zhong-shu-zu-pin-jie-de-ji-chong-fang-shi/">
                   <h3 class="post-title">
-                    HTML语法
+                    JavaScript中数组拼接的几种方式
                   </h3>
                 </a>
               </div>

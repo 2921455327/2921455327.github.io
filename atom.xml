@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://2921455327.github.io</id>
     <title>syz&apos;sinfo</title>
-    <updated>2022-03-31T02:31:11.875Z</updated>
+    <updated>2022-04-02T03:13:35.045Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://2921455327.github.io"/>
     <link rel="self" href="https://2921455327.github.io/atom.xml"/>
@@ -11,178 +11,938 @@
     <icon>https://2921455327.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, syz&apos;sinfo</rights>
     <entry>
-        <title type="html"><![CDATA[正则表达式的用途]]></title>
-        <id>https://2921455327.github.io/post/zheng-ze-biao-da-shi-de-yong-tu/</id>
-        <link href="https://2921455327.github.io/post/zheng-ze-biao-da-shi-de-yong-tu/">
+        <title type="html"><![CDATA[手写JavaScript的call，apply函数]]></title>
+        <id>https://2921455327.github.io/post/shou-xie-javascript-de-callapply-han-shu/</id>
+        <link href="https://2921455327.github.io/post/shou-xie-javascript-de-callapply-han-shu/">
         </link>
-        <updated>2022-03-12T01:32:07.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="0判断特定字符串">0.判断特定字符串</h2>
+        <updated>2022-04-02T03:10:36.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="apply和call函数的使用和区别">apply和call函数的使用和区别</h4>
 <blockquote>
-<p>要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:</p>
+<p>转换调用函数this的指向，将调用者的this指向传入的对象</p>
 </blockquote>
-<pre><code>&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
-const value = /[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-value.test(v)
-- test
-&gt;&gt;&gt; var value=/[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-&gt;&gt;&gt; value.test('v')
-// true
+<ul>
+<li>在只传入this指向的对象而不传参的情况下,apply和call使用基本一致</li>
+<li>如果不传入对象，默认传入的对象为window对象</li>
+</ul>
+<pre><code class="language-javascript">//call的使用
+  function name() {
+ 		//此时this指向call函数传入的对象
+        console.log(this);
+      }
+   let dog = {
+       	name: &quot;旺财&quot;,
+    };
+   name.call(dog);//{ name: '旺财' }
+//apply的使用
+function name() {
+		//此时this指向apply函数传入的对象
+        console.log(this);
+      }
+   let dog = {
+       	name: &quot;旺财&quot;,
+    };
+   name.apply(dog);//{ name: '旺财' }
 </code></pre>
-<h2 id="1切割字符串">1.切割字符串</h2>
-<blockquote>
-<p>在读取用户的输入的多个数据时，数据间的分隔符可能是多种多样的，有的人用一个空格，有个人用多个空格，有个人用逗号顿号分号等，而我们读取的是一整个的字符串，如何把这个字符串拆分为一个一个的数据项呢，此时正则就可以上场了</p>
-</blockquote>
-<pre><code>const reg=/[\s\,\、\。\,]+/
-const data=dataInput.split(reg)
-- test
-&gt;&gt;&gt; var reeg=/[\s\,\、\。\,]+/
-&gt;&gt;&gt; dataInput= &quot;A man, a plan, a canal: Panama&quot;
-// A man, a plan, a canal: Panama'
-&gt;&gt;&gt; dataInput.split(reeg)
-// ['A', 'man', 'a', 'plan', 'a', 'canal:', 'Panama']
+<ul>
+<li>apply,call还可以给调用函数传参，apply传入的是一个数组形式，call传入的是单个并列的参数形式</li>
+</ul>
+<pre><code class="language-javascript"> function name(age1,age2) {
+        console.log('我是'+this.name+',我今年'+age1+'岁了'+',我明年'+age2+'岁了');
+      }
+      let dog = {
+        name: &quot;旺财&quot;,
+      };
+   //call
+      name.call(dog,12,13);//我是旺财,我今年12岁了,我明年13岁了
+   //apply
+      name.apply(dog,[12,13])//我是旺财,我今年12岁了,我明年13岁了
 </code></pre>
-<p>这样写，程序的容错性就会明显提升很多</p>
-<h2 id="2提取字符串信息">2.提取字符串信息</h2>
-<blockquote>
-<p>使用exec方法最终得到的是一个数组，里面存放字符串中与正则表达式中匹配的内容，我们可以通过这种方法便捷的提取字符串中的内容</p>
-</blockquote>
-<pre><code>const re = /^(\d+)(0*)$/;
-re.exec('12300')  
-const reg = /^(\d+?)(0*)$/;
-reg.exec('12300')
-- test
-&gt;&gt;&gt; const re = /^(\d+)(0*)$/;
-&gt;&gt;&gt; re.exec('12300')
-// ['12300', '12300', '', index: 0, input: '12300', groups: undefined]
-&gt;&gt;&gt; const reg = /^(\d+?)(0*)$/;
-&gt;&gt;&gt; reg.exec('12300')
-// ['12300', '123', '00', index: 0, input: '12300', groups: undefined]
+<h4 id="手写call函数">手写call函数</h4>
+<pre><code class="language-javascript"> Function.prototype._call = function(obj,...args){
+            obj = obj || window
+            //创建符号对象
+            const fn = Symbol();
+            //此处的this指向调用call的函数，相当于给新创建的对象加了一个属性，属性值为调用call的函数，此时函数的this指向已经指向了这个对象
+            obj[fn] = this
+            //传参
+            let res = obj[fn](...args)
+            //解除this的引用，避免一些效率上的问题
+            delete obj[fn]
+            return res
+        }
+       //测试
+      function name(age1,age2) {
+        console.log('我是'+this.name+',我今年'+age1+'岁了'+',我明年'+age2+'岁了');
+      }
+      let dog = {
+        name: &quot;旺财&quot;,
+      };
+      name._call(dog,12,13);//我是旺财,我今年12岁了,我明年13岁了
 </code></pre>
-<h2 id="3替换字符串">3.替换字符串</h2>
-<blockquote>
-<p>使用string对象的replace方法可以对字符串中的某一部分进行替换，使用正则字符串后，可以方便的选择字符串中的特定字符，如显示客户信息时要将字符串中的金额数字替换为&quot;*&quot;</p>
-</blockquote>
-<pre><code>str.replace(/\d+/,&quot;*&quot;);
-- test
-&gt;&gt;&gt;str = &quot;$1&quot;
-// '$1'
-&gt;&gt;&gt;str.replace(/\d+/g,&quot;*&quot;)
-// '$*'
+<h4 id="手写apply函数">手写apply函数</h4>
+<ul>
+<li>apply和call函数只在传入参数时不太一样，其他部分完全一致</li>
+</ul>
+<pre><code class="language-javascript">	//	因为apply传入的是一个数组，所以要用args接收这个数组
+Function.prototype._apply = function(obj,args){
+            obj = obj || window
+            const fn = Symbol();
+            obj[fn] = this
+            console.log(...args);
+            //利用解构赋值，将传入的数组解构，传入调用apply的函数中
+            let res = obj[fn](...args)
+            delete obj[fn]
+            return res
+        }
+      function name(age1,age2) {
+        console.log('我是'+this.name+',我今年'+age1+'岁了'+',我明年'+age2+'岁了');
+      }
+      let dog = {
+        name: &quot;旺财&quot;,
+      };
+      name._apply(dog,12,13);//我是旺财,我今年12岁了,我明年13岁了
 </code></pre>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[HTML语法]]></title>
-        <id>https://2921455327.github.io/post/html-yu-fa/</id>
-        <link href="https://2921455327.github.io/post/html-yu-fa/">
+        <title type="html"><![CDATA[Css选择器种类以及优先级]]></title>
+        <id>https://2921455327.github.io/post/css-xuan-ze-qi-chong-lei-yi-ji-you-xian-ji/</id>
+        <link href="https://2921455327.github.io/post/css-xuan-ze-qi-chong-lei-yi-ji-you-xian-ji/">
         </link>
-        <updated>2022-02-10T07:14:59.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li>标签和属性不区分大小写，推荐小写</li>
-<li>空标签可以不闭合，比如input，meta</li>
-<li>属性值推荐用双引号包裹</li>
-<li>某些属性值可以省略，比如required，readonly</li>
+        <updated>2022-04-02T03:10:01.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E5%85%83%E7%B4%A0%E9%80%89%E6%8B%A9%E5%99%A8">元素选择器</a></li>
+<li><a href="#id%E9%80%89%E6%8B%A9%E5%99%A8">id选择器</a></li>
+<li><a href="#%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8">类选择器</a></li>
+<li><a href="#%E5%90%8E%E4%BB%A3%E9%80%89%E6%8B%A9%E5%99%A8">后代选择器</a></li>
+<li><a href="#%E5%AD%90%E4%BB%A3%E9%80%89%E6%8B%A9%E5%99%A8">子代选择器</a></li>
+<li><a href="#%E5%85%84%E5%BC%9F%E9%80%89%E6%8B%A9%E5%99%A8">兄弟选择器</a></li>
+<li><a href="#%E7%9B%B8%E9%82%BB%E9%80%89%E6%8B%A9%E5%99%A8">相邻选择器</a></li>
+<li><a href="#%E7%BE%A4%E7%BB%84%E9%80%89%E6%8B%A9%E5%99%A8">群组选择器</a></li>
+<li><a href="#%E5%85%A8%E5%B1%80%E9%80%89%E6%8B%A9%E5%99%A8">全局选择器</a></li>
+<li><a href="#%E5%B1%9E%E6%80%A7%E9%80%89%E6%8B%A9%E5%99%A8">属性选择器</a></li>
+<li><a href="#%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8">伪类选择器</a></li>
+<li><a href="#%E9%80%89%E6%8B%A9%E5%99%A8%E4%BC%98%E5%85%88%E7%BA%A7">选择器优先级</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+(目录标题)</p>
+<h4 id="元素选择器">元素选择器</h4>
+<blockquote>
+<p>以标签名开头，选择所有span元素</p>
+</blockquote>
+<pre><code class="language-javascript"> /* 元素选择器 */
+      span {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/ee19863604984afa868a776410140b57.png" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="id选择器">id选择器</h4>
+<blockquote>
+<p>给标签取id名，以#加id名开头，具有唯一性，选择”id = ‘p1’”的元素</p>
+</blockquote>
+<pre><code class="language-javascript"> /* id选择器 */
+      #p1 {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://img-blog.csdnimg.cn/db4ae9f714ce47eea5ec95ea4b4da3db.png" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="类选择器">类选择器</h4>
+<blockquote>
+<p>给标签取class名，以点.加class名开头，选择所有该class名的元素</p>
+</blockquote>
+<pre><code class="language-javascript"> /* 类选择器 */
+      .span1 {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://img-blog.csdnimg.cn/4ea7162caca7424faf886005880ec914.png" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="后代选择器">后代选择器</h4>
+<blockquote>
+<p>以空格隔开包含关系的元素,查找以class=‘content’的父元素下所有的p标签（<strong>包含孙子元素</strong><br>
+）</p>
+</blockquote>
+<pre><code class="language-javascript"> /* 后代选择器 */
+      .content p {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://img-blog.csdnimg.cn/4244edea126644dea5f5c913a0c24de2.png" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="子代选择器">子代选择器</h4>
+<blockquote>
+<p>以&gt;隔开包含关系的元素,查找以class=‘content’的父元素下所有的class=‘span1’的<strong>儿子</strong>元素</p>
+</blockquote>
+<pre><code class="language-javascript"> /* 子代选择器 */
+      .content &gt; .span1 {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://img-blog.csdnimg.cn/fd65cee429ce41f8a8436755d24be0ce.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="兄弟选择器">兄弟选择器</h4>
+<blockquote>
+<p>以波浪号隔开兄弟关系的元素(修饰前一个选择器往下的所有兄弟选择器)</p>
+</blockquote>
+<pre><code class="language-javascript"> /* 兄弟选择器 */
+      #p1 ~ p {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="6"><img src="https://img-blog.csdnimg.cn/1cf01db0334645ea84d21cbd14321b34.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="相邻选择器">相邻选择器</h4>
+<blockquote>
+<p>以+隔开相邻关系的元素(修饰前一个选择器往下的相邻的选择器 只能一个)</p>
+</blockquote>
+<pre><code class="language-javascript"> #p1 + .span1 {
+        background-color: aqua;
+      }
+</code></pre>
+<figure data-type="image" tabindex="7"><img src="https://img-blog.csdnimg.cn/8506c61f1cc54c3b9efe91ab2130645d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="群组选择器">群组选择器</h4>
+<blockquote>
+<p>以，分隔(逗号分隔开需要修饰的选择器)</p>
+</blockquote>
+<pre><code class="language-javascript"> /* 群组选择器 */
+      p,
+      span {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="8"><img src="https://img-blog.csdnimg.cn/e7e6cc1ab37641dc827f7f39cba1d499.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="全局选择器">全局选择器</h4>
+<blockquote>
+<p>以*开头,查找body下所有标签</p>
+</blockquote>
+<pre><code class="language-javascript">/* 全局选择器 */
+      * {
+        margin: 0;
+        padding: 0;
+      }
+</code></pre>
+<figure data-type="image" tabindex="9"><img src="https://img-blog.csdnimg.cn/9cbabf55387342a695fab045afebeb2b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="属性选择器">属性选择器</h4>
+<blockquote>
+<p>以[ ]修饰，查找属性type=text的元素</p>
+</blockquote>
+<pre><code class="language-javascript"> /* 属性选择器 */
+      input[type=&quot;text&quot;] {
+        background-color: aquamarine;
+      }
+</code></pre>
+<figure data-type="image" tabindex="10"><img src="https://img-blog.csdnimg.cn/74b6cc88ddfe4d75b72a7084e15ac530.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="伪类选择器">伪类选择器</h4>
+<blockquote>
+<p>以：为修饰符，修饰前一个选择器，比如‘button:hover’表示当鼠标放在button元素上面时，设置字体颜色为浅蓝色</p>
+</blockquote>
+<pre><code class="language-javascript">/* 伪类选择器 */
+      button:hover {
+        color: aqua;
+      }
+</code></pre>
+<figure data-type="image" tabindex="11"><img src="https://img-blog.csdnimg.cn/d752c06396274763ab1977ff180ff2e5.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></figure>
+<h4 id="选择器优先级">选择器优先级</h4>
+<p>先不讨论多个选择器嵌套的情况</p>
+<ul>
+<li>css优先级: !important&gt;行间样式&gt; ID选择器&gt;属性选择器&amp;&amp;伪类选择器&gt;类选择器&gt;元素选择器<br>
+具体：</li>
+<li>a:行内样式:优先级1000</li>
+<li>b:ID选择器:优先级100</li>
+<li>c:类选择器:优先级10 (伪类属性优先级10 ）</li>
+<li>d:元素选择器:优先级1<br>
+注意：! important:优先级最大10000 (用了后就不能修改慎用)</li>
+</ul>
+<blockquote>
+<p>具体例子：<br>
+span 优先级1<br>
+div span 优先级1+1<br>
+div:first-child == 1+10<br>
+.p1 span 优先级10+1.<br>
+#divI span 优先级100+1</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[关于浏览器的本地存储]]></title>
+        <id>https://2921455327.github.io/post/guan-yu-liu-lan-qi-de-ben-di-cun-chu/</id>
+        <link href="https://2921455327.github.io/post/guan-yu-liu-lan-qi-de-ben-di-cun-chu/">
+        </link>
+        <updated>2022-04-02T03:09:34.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="浏览器本地存储大小">浏览器本地存储大小</h3>
+<ul>
+<li>存储内容大小一般支持5MB左右（不同浏览器可能还不一样）</li>
+</ul>
+<h3 id="存储的实现机制">存储的实现机制</h3>
+<ul>
+<li>浏览器通过Window.sessionStorage和Window.localStorage属性来实现本地存储机制</li>
+</ul>
+<h3 id="存储操作的相关api">存储操作的相关api</h3>
+<pre><code class="language-javascript">localStorage.setItem('key','value')
+//该方法接受-一个键和值作为参数，会把键值对添加到存储中，如果键名存在，则更新其对应的值。
+localStorage.getItem('key')
+//该方法接受一个键名作为参数，返回键名对应的值。
+localStorage.removeItem('key')
+//该方法接受一个键名作为参数， 并把该键名从存储中删除。
+localStorage.clear()
+//该方法会清空存储中的所有数据。
+</code></pre>
+<ul>
+<li>sessionStorage和localStorage的使用方法基本一致，在这里不做演示了。</li>
+</ul>
+<h3 id="一些需要注意的地方">一些需要注意的地方：</h3>
+<ol>
+<li>SessionStorage存储的内容会随着浏览器窗口关闭而消失。</li>
+<li>LocalStorage存储的内容，需要手动清除才会消失。</li>
+<li>xxxStorage . getem(xx)如果xxx对应的value获取不到，那么geltem的返回值是null.</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[JavaScript中关于字符串的操作方法]]></title>
+        <id>https://2921455327.github.io/post/javascript-zhong-guan-yu-zi-fu-chuan-de-cao-zuo-fang-fa/</id>
+        <link href="https://2921455327.github.io/post/javascript-zhong-guan-yu-zi-fu-chuan-de-cao-zuo-fang-fa/">
+        </link>
+        <updated>2022-04-02T03:09:01.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="字符串的拼接concat">字符串的拼接：concat()</h3>
+<blockquote>
+<p>用于将一个或多个字符串拼接成一个新字符串<br>
+concat()方法可以接收任意多个参数，因此可以一次性拼接多个字符串，<br>
+concat()方法不会改变原字符串</p>
+</blockquote>
+<pre><code class="language-javascript">let string = 'hello'
+//接收一个参数
+let result = string.concat(',world')
+//接收多个参数
+let result1 = string.concat(',world',' !')
+console.log(string);// hello
+console.log(result);// hello,world
+console.log(result1);// hello,world !
+</code></pre>
+<blockquote>
+<p>虽然 concat()方法可以拼接字符串，但更常用的方式是使用加号操作符（+）。而且多数情况下，对于拼接多个字符串来说，使用加号更方便。</p>
+</blockquote>
+<pre><code class="language-javascript">let result = 'hello'+',world'+'!'
+console.log(result);//hello,world!
+</code></pre>
+<h3 id="字符串的截取slicesubstringsubstr">字符串的截取：slice(),substring(),substr()</h3>
+<blockquote>
+<ul>
+<li>3个方法都返回调用它们的字符串的一个子字符串，而且都接收一或两个参数。第一个参数表示<strong>子字符串开始的位置</strong>，对 slice()和 substring()而言，第二个参数是<strong>提取结束的位置</strong>（即该位置之前的字符会被提取出来）。对 substr()而言，第二个参数表示返回的<strong>子字符串数量。</strong></li>
+<li>任何情况下，省略第二个参数都意味着提取到<strong>字符串末尾</strong>。与 concat()方法一样，slice()、substr()<br>
+和 substring()也不会修改调用它们的字符串，而只会返回提取到的原始新字符串值。</li>
+</ul>
+</blockquote>
+<pre><code class="language-javascript">let string = &quot;hello world&quot;; 
+console.log(string.slice(3)); // &quot;lo world&quot; 
+console.log(string.substring(3)); // &quot;lo world&quot; 
+console.log(string.substr(3)); // &quot;lo world&quot; 
+console.log(string.slice(3, 7)); // &quot;lo w&quot; 
+console.log(string.substring(3,7)); // &quot;lo w&quot; 
+console.log(string.substr(3, 7)); // &quot;lo worl&quot; 
+</code></pre>
+<blockquote>
+<p>如果传入的参数为负值呢？</p>
+<ul>
+<li>slice()方法将所有负值参数都当成字符串长度加上负参数值</li>
+<li>substr()方法将第一个负参数值当成字符串长度加上该值，将第二个负参数值转换为 0</li>
+<li>substring()方法会将所有负参数值都转换为 0</li>
+</ul>
+</blockquote>
+<pre><code class="language-javascript">let string = &quot;hello world&quot;; 
+console.log(string.slice(-3)); // &quot;rld&quot; 
+console.log(string.substring(-3)); // &quot;hello world&quot; 
+console.log(string.substr(-3)); // &quot;rld&quot; 
+console.log(string.slice(3, -4)); // &quot;lo w&quot; 
+console.log(string.substring(3, -4)); // &quot;hel&quot; 
+console.log(string.substr(3, -4)); // &quot;&quot; (empty string) 
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[JavaScript中数组拼接的几种方式]]></title>
+        <id>https://2921455327.github.io/post/javascript-zhong-shu-zu-pin-jie-de-ji-chong-fang-shi/</id>
+        <link href="https://2921455327.github.io/post/javascript-zhong-shu-zu-pin-jie-de-ji-chong-fang-shi/">
+        </link>
+        <updated>2022-04-02T03:08:31.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="concat方法拼接">concat()方法拼接</h3>
+<blockquote>
+<p>concat方法不会更改现有数组，而是返回一个新数组。</p>
+</blockquote>
+<pre><code class="language-javascript">let a = [1,2,3,4,5,6]
+let b = ['喵喵','旺财','大黄']
+//concat
+let c = a.concat(b)
+console.log(c);//[1,2,3,4,5,6,'喵喵','旺财','大黄']
+</code></pre>
+<h3 id="循环拼接">循环拼接</h3>
+<pre><code class="language-javascript">let a = [1,2,3,4,5,6]
+let b = ['喵喵','旺财','大黄']
+for(let i=0;i&lt;b.length;i++){
+    a.push(b[i])
+}
+console.log(a);//[1,2,3,4,5,6,'喵喵','旺财','大黄']
+</code></pre>
+<h3 id="pushapply方法拼接">push.apply()方法拼接</h3>
+<blockquote>
+<p>push.apply合并数组是把后一个数组的值依次push进前一个数组，使前一个数组发生改变</p>
+</blockquote>
+<pre><code class="language-javascript">let a = [1,2,3,4,5,6]
+let b = ['喵喵','旺财','大黄']
+a.push.apply(a,b)
+console.log(a);//[1,2,3,4,5,6,'喵喵','旺财','大黄']
+</code></pre>
+<h3 id="es6结构赋值">es6结构赋值</h3>
+<pre><code class="language-javascript">let a = [1,2,3,4,5,6]
+let b = ['喵喵','旺财','大黄']
+a.push(...b)
+console.log(a);//[1,2,3,4,5,6,'喵喵','旺财','大黄']
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Es6中关于对象方法的扩展]]></title>
+        <id>https://2921455327.github.io/post/es6-zhong-guan-yu-dui-xiang-fang-fa-de-kuo-zhan/</id>
+        <link href="https://2921455327.github.io/post/es6-zhong-guan-yu-dui-xiang-fang-fa-de-kuo-zhan/">
+        </link>
+        <updated>2022-04-02T03:07:46.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="objectis">Object.is()</h3>
+<blockquote>
+<p>这个方法与===很像，但同时也考虑到了边界情形。这个方法必须接收两个参数：<br>
+主要用于判断两个对象是否相等，但和'===有一些不一样的地方</p>
+</blockquote>
+<pre><code class="language-javascript">console.log(Object.is(true, 1)); // false 
+console.log(Object.is({}, {})); // false 
+console.log(Object.is(&quot;2&quot;, 2)); // false 
+// 正确的 0、-0、+0 相等/不等判定
+console.log(Object.is(+0, -0)); // false 
+console.log(Object.is(+0, 0)); // true 
+console.log(Object.is(-0, 0)); // false 
+// 正确的 NaN 相等判定
+console.log(Object.is(NaN, NaN)); // true 
+//要检查超过两个值，递归地利用相等性传递即可：
+function recursivelyCheckEqual(num, ...test) { 
+ return Object.is(num, test[0]) &amp;&amp; 
+ (test.length &lt; 2 || recursivelyCheckEqual(...test)); 
+}
+</code></pre>
+<h3 id="objectassign">Object.assign()</h3>
+<blockquote>
+<p>ECMAScript 6 专门为合并对象提供了 Object.assign()方法。这个方法接收一个目标对象和一个<br>
+或多个源对象作为参数</p>
+</blockquote>
+<pre><code class="language-javascript">const student={
+    name:'syz',
+    age:18,
+    aaa:'1111'
+}
+const student1={
+    name:'zs',
+    age:36,
+    bbb:'1111'
+}
+//后面的会覆盖前面的重名属性和方法
+console.log(Object.assign(student,student1));//{ name: 'zs', age: 36, aaa: '1111', bbb: '1111' }
+</code></pre>
+<ul>
+<li>注意：后面传入的参数会覆盖前面的重名属性和方法</li>
+</ul>
+<h3 id="objectkeys">Object.keys()</h3>
+<blockquote>
+<p>获取对象所有的键,返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.keys(obj));//[ 'a', 'cities' ]
+</code></pre>
+<h3 id="objectvalues">Object.values()</h3>
+<blockquote>
+<p>获取对象的所有值，返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj1={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.values(obj1));//[ '1', [ 'a', 'b', 'c' ] ]
+</code></pre>
+<h3 id="objectentries">Object.entries()</h3>
+<blockquote>
+<p>获取对象的键和值，返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj1={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.entries(obj1))//[ [ 'a', '1' ], [ 'cities', [ 'a', 'b', 'c' ] ] ]
+</code></pre>
+<h3 id="objectsetprototypeof">Object.setPrototypeOf()</h3>
+<blockquote>
+<p>为一个对象设置它的原型对象</p>
+</blockquote>
+<pre><code class="language-javascript">const person = {
+    dosth:&quot;play lol&quot;
+}
+const animal={
+    attr:['eat','drink']
+}
+Object.setPrototypeOf(person,animal)
+console.log(person.__proto__.attr[0]);//eat
+</code></pre>
+<h3 id="objectgetownpropertydescriptors">Object.getOwnPropertyDescriptors()</h3>
+<blockquote>
+<p>获取对象的描述信息，返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj1={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.getOwnPropertyDescriptors(obj1));
+//输出：
+/*
+{
+  a: { value: '1', writable: true, enumerable: true, configurable: true },
+  cities: {
+    value: [ 'a', 'b', 'c' ],//值
+    writable: true,//该值是否可以被修改
+    enumerable: true,//是否可以被枚举
+    configurable: true,//是否可以被删除
+  }
+}
+*/
+</code></pre>
+<h3 id="objectdefineproperty">Object.defineProperty()</h3>
+<blockquote>
+<p>创建对象的值和描述信息的函数（传一个值）</p>
+</blockquote>
+<pre><code class="language-javascript">const student = {
+  name: &quot;小明&quot;,
+  age: 19,
+  [Symbol(&quot;level&quot;)]: &quot;优秀&quot;,
+};
+Object.defineProperty(student, &quot;gender&quot;, {
+  value: &quot;男&quot;, //值
+  writable: true, //是否可修改的
+  enumerable: true, //是否可以枚举的
+  configurable: true, //是否可以删除的
+});
+console.log(student)//{ name: '小明', age: 19, gender: '男', [Symbol(level)]: '优秀' }
+</code></pre>
+<h3 id="objectdefineproperties">Object.defineProperties()</h3>
+<blockquote>
+<p>创建对象的值和描述信息的函数（传多个值）</p>
+</blockquote>
+<pre><code class="language-javascript">const student = {
+  name: &quot;小明&quot;,
+  age: 19,
+  [Symbol(&quot;level&quot;)]: &quot;优秀&quot;,
+};
+Object.defineProperties(student,{
+    id:{
+      value:'001',
+      writable: true, //是否可修改的
+      enumerable: true, //是否可以枚举的
+    },
+    sex:{
+      value:'男',
+      writable: true, //是否可修改的
+      enumerable: true, //是否可以枚举的
+      configurable: true, //是否可以删除的
+    }
+})
+console.log(student)//{name: '小明', age: 19, id: '001', sex: '男', Symbol(level): '优秀'}
+</code></pre>
+<ul>
+<li>如果用上述方法创建，描述对象的属性值默认为false</li>
+</ul>
+<p>确定不点个赞再走嘛？<br>
+<img src="https://img-blog.csdnimg.cn/05dd78aff484422086f155e4a23fb1e7.gif" alt="在这里插入图片描述" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[利用生成器函数解决回调地狱的问题]]></title>
+        <id>https://2921455327.github.io/post/li-yong-sheng-cheng-qi-han-shu-jie-jue-hui-diao-di-yu-de-wen-ti/</id>
+        <link href="https://2921455327.github.io/post/li-yong-sheng-cheng-qi-han-shu-jie-jue-hui-diao-di-yu-de-wen-ti/">
+        </link>
+        <updated>2022-04-02T03:07:17.000Z</updated>
+        <content type="html"><![CDATA[<p>需求：1秒后控制台输出111，然后2秒后输出222，然后三秒后输出333</p>
+<h3 id="原始做法">原始做法</h3>
+<pre><code class="language-javascript">setTimeout(() =&gt; {
+    console.log(111);
+    setTimeout(() =&gt; {
+        console.log(222);
+        setTimeout(() =&gt; {
+            console.log(333);
+        }, 3000);
+    }, 2000);
+}, 1000);
+</code></pre>
+<blockquote>
+<p>这只是三层嵌套，想象一下，如果有100层，这样的代码不仅臃肿，还不利于后期的管理<br>
+下面用生成器函数解决一下这个问题：</p>
+</blockquote>
+<h3 id="生成器函数做法">生成器函数做法</h3>
+<pre><code class="language-javascript">function one(){
+    setTimeout(() =&gt; {
+        console.log(111);
+        result.next()
+    }, 1000);
+}
+function two(){
+    setTimeout(() =&gt; {
+        console.log(222);
+        result.next()
+    }, 2000);
+}
+function three(){
+    setTimeout(() =&gt; {
+        console.log(333);
+    }, 3000);
+}
+function * gen(){
+    yield one()
+    yield two()
+    yield three()
+}
+let result = gen()
+result.next()
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/8c81251b202949488d7693f12152c053.gif" alt="在这里插入图片描述" loading="lazy"></figure>
+<p>如果对生成器函数有不懂的小伙伴，可以看下我上一篇博客：ES6新特性：生成器函数<br>
+附上原文地址：<a href="https://blog.csdn.net/weixin_58498354/article/details/123645132">生成器函数</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ES6新特性：生成器函数]]></title>
+        <id>https://2921455327.github.io/post/es6-xin-te-xing-sheng-cheng-qi-han-shu/</id>
+        <link href="https://2921455327.github.io/post/es6-xin-te-xing-sheng-cheng-qi-han-shu/">
+        </link>
+        <updated>2022-04-02T03:06:39.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="定义生成器函数">定义生成器函数</h3>
+<p>生成器函数和普通函数定义没有太大的差别，只是函数名前面多了一个*</p>
+<pre><code class="language-javascript">function * gen(){
+	console.log(111)
+}
+</code></pre>
+<h3 id="执行生成器函数">执行生成器函数</h3>
+<p>生成器函数直接调用函数不会执行，需要调用生成器函数内部的next方法函数才会执行</p>
+<pre><code class="language-javascript">function * gen(){
+	console.log(111)
+}
+let result = gen()
+result.next()
+//输出111
+</code></pre>
+<h3 id="yield语句">yield语句</h3>
+<p>yield语句会把函数分为几个部分，然后调用next函数异步去执行</p>
+<pre><code class="language-javascript">function * gen(){
+	console.log(111)
+    yield one()
+    console.log(222)
+    yield two()
+    console.log(333)
+    yield three()
+    console.log(444)
+}
+let result = gen()
+result.next()
+result.next()
+result.next()
+result.next()
+</code></pre>
+<p>上诉yield语句把函数分为4个部分<br>
+第一部分为</p>
+<pre><code class="language-javascript">console.log(111)
+    yield one()
+</code></pre>
+<p>第二部分为</p>
+<pre><code class="language-javascript">console.log(222)
+    yield two()
+</code></pre>
+<p>第三部分为</p>
+<pre><code class="language-javascript">console.log(333)
+ 	yield three()
+</code></pre>
+<p>第四部分为</p>
+<pre><code class="language-javascript">console.log(444)
+</code></pre>
+<h4 id="yield语句的返回值">yield语句的返回值：</h4>
+<p>生成器函数执行之后，yield语句内的值以对象的形式返回，value中对应着yield语句中的值，done：代表着这个函数的异步任务是否走到结尾，false（没有走到结尾），true（走到了结尾）</p>
+<h3 id="生成器函数的传参问题">生成器函数的传参问题</h3>
+<ul>
+<li>第一次调用生成器函数时的传参，为生成器的形参<br>
+下面代码中的实参AAA对应着形参args</li>
+<li>第二个next传入的实参对应第一个yield语句的返回值<br>
+下面代码中的实参CCC对应的第一个yield语句的返回值aaa</li>
+<li>第三个next传入的实参对应第二个yield语句的返回值<br>
+下面代码中的实参DDD对应的第一个yield语句的返回值bbb</li>
+<li>第四个next传入的实参对应第三个yield语句的返回值<br>
+下面代码中的实参EEE对应的第一个yield语句的返回值ccc</li>
+</ul>
+<pre><code class="language-javascript">function * gen(args){
+    console.log(args);
+    let aaa =  yield '111'
+    console.log(aaa);
+    let bbb = yield '222'
+    console.log(bbb);
+    let ccc = yield '333'
+    console.log(ccc);
+}
+
+gen函数的传参和调用问题
+let result = gen('AAA')
+//做为前一个yield整体的返回结果
+console.log(result.next());
+console.log(result.next('CCC'));
+console.log(result.next('DDD'));
+console.log(result.next('EEE'));
+//输出结果
+//AAA
+//{ value: '111', done: false }
+//CCC
+//{ value: '222', done: false }
+//DDD
+//{ value: '333', done: false }
+//EEE
+//{ value: undefined, done: true }
+</code></pre>
+<p>讲完啦<br>
+<img src="https://img-blog.csdnimg.cn/6427eaf32e0341e890a9e350be47f9d6.gif" alt="在这里插入图片描述" loading="lazy"></p>
+<p>谢谢大家的观看<br>
+关于生成器函数的一个扩展：<br>
+<a href="https://blog.csdn.net/weixin_58498354/article/details/123644862?spm=1001.2014.3001.5502">利用生成器函数解决回调地狱的问题</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Vue中如何自定义指令]]></title>
+        <id>https://2921455327.github.io/post/vue-zhong-ru-he-zi-ding-yi-zhi-ling/</id>
+        <link href="https://2921455327.github.io/post/vue-zhong-ru-he-zi-ding-yi-zhi-ling/">
+        </link>
+        <updated>2022-04-02T03:06:04.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1自定义指令的作用">1.自定义指令的作用</h3>
+<blockquote>
+<p>在实际项目开发过程中，除了vue自身提供的一些固定指令，如v-if,v-show,v-model等除外，我们可能根据项目的需求来自己注册一些自定义的指令，更好的提高开发和工作效率。</p>
+</blockquote>
+<h3 id="2自定义指令注册的两种方式">2.自定义指令注册的两种方式</h3>
+<blockquote>
+<ul>
+<li>自定义指令有全局注册和局部注册两种方式，</li>
+</ul>
+</blockquote>
+<h3 id="3一个自定义指令的案例局部注册">3.一个自定义指令的案例（局部注册）</h3>
+<blockquote>
+<p>先看需求：定义一个v-big指令，要求和v-text功能类似，但会把绑定的数值放大10倍</p>
+</blockquote>
+<pre><code class="language-javascript"> &lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;
+      &lt;h3 v-big=&quot;n&quot;&gt;{{n}}&lt;/h3&gt;
+      &lt;button @click=&quot;n++&quot;&gt;点我n++&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+      new Vue({
+        el: &quot;#app&quot;,
+        data() {
+          return {
+            n: 1,
+          };
+        },
+        //局部定义自定义指令
+        directives: {
+          //自定义了一个v-big的自定义指令
+          big(Element, binding) {
+          	//Element为h3节点，binding.value为传入的值n
+            Element.innerText = binding.value * 10;
+          },
+        },
+      });
+    &lt;/script&gt;
+  &lt;/body&gt;
+</code></pre>
+<ul>
+<li>执行结果如下：<br>
+<img src="https://img-blog.csdnimg.cn/8bf8f81e97be42998aba416fc1f6a388.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></li>
+</ul>
+<blockquote>
+<p>关于上面代码的几个疑问：<br>
+1.directives是什么？<br>
+directives是vue为我们提供的一个自定义指令的对象，类似于methods，watch，<br>
+2.自定义指令名称写什么？<br>
+我们定义的指令名称为v-big，即下面就用big来创建函数<br>
+3.big函数传入的参数是什么？<br>
+第一个参数为当前绑定自定义指令的dom节点，第二个参数为一个对象：<br>
+<img src="https://img-blog.csdnimg.cn/a524586dd42a4265a1bec7652cccf0c3.png" alt="" loading="lazy"><br>
+我们只要关注他的value值即可，他的value值就是自定义指令传入的值n<br>
+4.big函数什么时候被调用：<br>
+当vue模板被重新解析时就会调用big函数</p>
+</blockquote>
+<h3 id="4全局注册实现小案例">4.全局注册实现小案例</h3>
+<pre><code class="language-javascript"> &lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;
+      &lt;h3 v-big=&quot;n&quot;&gt;{{n}}&lt;/h3&gt;
+      &lt;button @click=&quot;n++&quot;&gt;点我n++&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+    //全局注册了一个v-big的自定义指令
+     Vue.directive('big',(Element,binding)=&gt;{
+        Element.innerText = binding.value * 10;
+      })
+      new Vue({
+        el: &quot;#app&quot;,
+        data() {
+          return {
+            n: 1,
+          };
+        },
+      });
+    &lt;/script&gt;
+  &lt;/body&gt;
+</code></pre>
+<p>运行截图和上面一样，就不演示了。</p>
+<ul>
+<li>注意全局注册为directive而不是directives，没有s。</li>
 </ul>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[前端是什么？]]></title>
-        <id>https://2921455327.github.io/post/qian-duan-shi-shi-me/</id>
-        <link href="https://2921455327.github.io/post/qian-duan-shi-shi-me/">
+        <title type="html"><![CDATA[JavaScript中this的指向问题]]></title>
+        <id>https://2921455327.github.io/post/javascript-zhong-this-de-zhi-xiang-wen-ti/</id>
+        <link href="https://2921455327.github.io/post/javascript-zhong-this-de-zhi-xiang-wen-ti/">
         </link>
-        <updated>2022-02-10T06:54:28.000Z</updated>
-        <content type="html"><![CDATA[<p>1.解决GUI（图形界面下的）人机问题<br>
-2.跨终端<br>
-- pc/移动浏览器<br>
-- 客户端/小程序<br>
-- VR/AR等<br>
-3.Web技术栈<br>
-🚩前端工程师是使用Web技术栈解决多端图形用户界面交互问题的工程师。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Es6：set方法]]></title>
-        <id>https://2921455327.github.io/post/es6set-fang-fa/</id>
-        <link href="https://2921455327.github.io/post/es6set-fang-fa/">
-        </link>
-        <updated>2022-02-10T02:21:43.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="1set的一些重要的特性">1.set的一些重要的特性</h2>
+        <updated>2022-04-02T03:05:25.000Z</updated>
+        <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1%E7%9B%B4%E6%8E%A5%E8%BE%93%E5%87%BA%E7%9A%84this%E6%8C%87%E5%90%91window">1.直接输出的this指向window</a></li>
+<li><a href="#2%E5%85%A8%E5%B1%80%E9%9D%9E%E5%B5%8C%E5%A5%97%E5%87%BD%E6%95%B0%E7%9A%84this%E6%8C%87%E5%90%91window%E5%B5%8C%E5%A5%97%E5%87%BD%E6%95%B0this%E7%9A%84%E6%8C%87%E5%90%91%E4%BB%96%E7%9A%84%E7%88%B6%E7%BA%A7%E5%87%BD%E6%95%B0">2.全局非嵌套函数的this指向window，嵌套函数this的指向他的父级函数</a></li>
+<li><a href="#3%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95%E8%BE%93%E5%87%BAthis%E6%8C%87%E5%90%91%E8%BF%99%E4%B8%AA%E5%AF%B9%E8%B1%A1">3.对象的方法输出this，指向这个对象</a></li>
+<li><a href="#4dom%E4%BA%8B%E4%BB%B6%E6%96%B9%E6%B3%95%E8%BE%93%E5%87%BAthis%E6%8C%87%E5%90%91dom%E5%85%83%E7%B4%A0">4.dom事件方法输出this，指向dom元素</a></li>
+<li><a href="#5%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E4%B8%ADthis%E7%9A%84%E6%8C%87%E5%90%91">5.构造函数中this的指向：</a></li>
+<li><a href="#6%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E7%9A%84this%E6%8C%87%E5%90%91%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%80%85">6.箭头函数的this指向箭头函数的调用者</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</p>
+<h3 id="1直接输出的this指向window">1.直接输出的this指向window</h3>
+<pre><code class="language-javascript"> //直接输出指向window
+        console.log(this);
+ //output：window
+</code></pre>
+<h3 id="2全局非嵌套函数的this指向window嵌套函数this的指向他的父级函数">2.全局非嵌套函数的this指向window，嵌套函数this的指向他的父级函数</h3>
+<pre><code class="language-javascript">  //全局函数输出this，指向window
+        function fn(){
+            console.log(this);
+        }
+        fn()
+   //output：window
+   //嵌套函数this的指向指向他的父级函数
+           function F(){
+            this.name = '李四'
+            function test() {
+                console.log(this.name);
+            }
+        }
+         F()
+    //output：李四
+</code></pre>
+<h3 id="3对象的方法输出this指向这个对象">3.对象的方法输出this，指向这个对象</h3>
+<pre><code class="language-javascript">//对象的方法输出this，指向这个对象
+        const dog={
+            name:'旺旺',
+            sayName(){
+                console.log(this);
+            }
+        }
+        dog.sayName()
+ //output：旺旺
+</code></pre>
+<h3 id="4dom事件方法输出this指向dom元素">4.dom事件方法输出this，指向dom元素</h3>
+<pre><code class="language-javascript">//html:
+&lt;button id=&quot;btn&quot;&gt;点我触发方法&lt;/button&gt;
+//js:
+ //dom事件方法输出this，指向dom元素
+        document.querySelector(&quot;#btn&quot;).onclick = function click() {
+            console.log(this);
+        }
+ //output:&lt;button id=&quot;btn&quot;&gt;点我触发方法&lt;/button&gt;
+</code></pre>
+<h3 id="5构造函数中this的指向">5.构造函数中this的指向：</h3>
 <blockquote>
-<p>(1)Set.prototype.constructor，构造函数，默认是set函数<br>
-(2)Set.prototype.size,返回set实例的成员总数<br>
-(3)set是一种数据结构，是伪数组，无法访问长度，可以Array.from方法可以将set结构转化数组，再访问它的长度；<br>
-(4)set里面添加的对象即使相同也是不相等的，例如：set.add({a:1});  set.add({a:1});   可以同时存在；</p>
+<p>如果把构造函数当成普通函数去执行的话，this还是指向window</p>
 </blockquote>
-<h2 id="2set的四种操作方法">2.set的四种操作方法：</h2>
-<pre><code>
-        // 添加元素
-            add(value),用于向数组中添加元素，返回set结构本身；
-            set.add(11112);
-        //删除元素
-            delete(value),删除元素，返回一个bool值，表示是否删除成功；
-            set.delete(23);
-        //是否存在某个元素
-            has(value),返回一个bool值表示set中是否含有本元素；
-            set.has(13);
-            console.log(set.has(13));
-        //清除所有成员
-            clear(),清除所有的set成员，没有返回值；
-            set.clear();
-            console.log(set);
+<pre><code class="language-javascript">function F(){
+            this.name = '李四'
+            console.log(this);
+        }
+        F()
+  //output:window
 </code></pre>
-<h2 id="4set的遍历方法">4.set的遍历方法</h2>
-<pre><code>
-        //遍历key
-            let set1 = new Set(['1','2','3']);
-            for(let key of set1.keys()){
-                console.log(key);
-            }
-        //遍历value
-            for(let value of set1.values()){
-                console.log(value);
-            }
-        //遍历item
-            for(let item of set1.entries()){
-                console.log(item);
-            }
-        // for...of..遍历
-            let myArr = new Set([1,2,3,4,5]);
-            for(let x of myArr){
-                console.log(x);
-            }
+<blockquote>
+<p>如果用构造函数创建了一个对象，会改变其中this的指向：this会指向构造函数的原型对象</p>
+</blockquote>
+<pre><code class="language-javascript">        function F(){
+            this.name = '李四'
+            console.log(this);
+        }
+        let f = new F()
+    //output：F {name: '李四'} 
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://2921455327.github.io/post/hello-gridea/</id>
-        <link href="https://2921455327.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+<ul>
+<li>在讲箭头函数的this指向之前，先看一个转换this指向的小例子</li>
+</ul>
+<pre><code class="language-javascript">        const dog1={
+            name:'旺旺',
+            sayName(){
+           		//sayName函数的this指向对象dogs的this，我们可以用_this做一个中转变量，
+                _this = this
+                setTimeout(function () {
+                	//这里的_this就是对象dogs的this
+                    console.log(_this.name);
+                },1000)
+            }
+        }
+        dog1.sayName()
+    //output：一秒之后会输出：旺旺
+</code></pre>
+<h3 id="6箭头函数的this指向箭头函数的调用者">6.箭头函数的this指向箭头函数的调用者</h3>
+<blockquote>
+<p>我们上面的小例子还可以用箭头函数的方式解决this的指向问题</p>
+</blockquote>
+<pre><code class="language-javascript"> const dog2={
+            name:'旺旺',
+            sayName(){
+                setTimeout(() =&gt; {
+                    console.log(this.name);
+                }, 2000);
+            }
+        }
+        dog2.sayName()
+   //output：一秒之后会输出：旺旺
+</code></pre>
+<blockquote>
+<p>因为箭头函数的this指向箭头函数的调用者：（sayName函数），因为sayName函数的this指向为对象dog2，所以箭头函数的this指向为对象dog2，所以上面函数一秒之后会输出：旺旺</p>
+</blockquote>
+<hr>
+<p>谢谢大家的观看，如果有所收获请点个赞吧（拜谢，拜谢，拜谢）</p>
 ]]></content>
     </entry>
 </feed>

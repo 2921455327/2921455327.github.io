@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Vue中如何自定义指令 | syz&#39;sinfo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1648869173796">
+<link rel="stylesheet" href="https://2921455327.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1.自定义指令的作用
+
+在实际项目开发过程中，除了vue自身提供的一些固定指令，如v-if,v-show,v-model等除外，我们可能根据项目的需求来自己注册一些自定义的指令，更好的提高开发和工作效率。
+
+2.自定义指令注册的两种方式
+
+..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://2921455327.github.io">
+        <img src="https://2921455327.github.io/images/avatar.png?v=1648869173796" class="site-logo">
+        <h1 class="site-title">syz&#39;sinfo</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://2921455327.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Vue中如何自定义指令</h2>
+            <div class="post-date">2022-04-02</div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="1自定义指令的作用">1.自定义指令的作用</h3>
+<blockquote>
+<p>在实际项目开发过程中，除了vue自身提供的一些固定指令，如v-if,v-show,v-model等除外，我们可能根据项目的需求来自己注册一些自定义的指令，更好的提高开发和工作效率。</p>
+</blockquote>
+<h3 id="2自定义指令注册的两种方式">2.自定义指令注册的两种方式</h3>
+<blockquote>
+<ul>
+<li>自定义指令有全局注册和局部注册两种方式，</li>
+</ul>
+</blockquote>
+<h3 id="3一个自定义指令的案例局部注册">3.一个自定义指令的案例（局部注册）</h3>
+<blockquote>
+<p>先看需求：定义一个v-big指令，要求和v-text功能类似，但会把绑定的数值放大10倍</p>
+</blockquote>
+<pre><code class="language-javascript"> &lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;
+      &lt;h3 v-big=&quot;n&quot;&gt;{{n}}&lt;/h3&gt;
+      &lt;button @click=&quot;n++&quot;&gt;点我n++&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+      new Vue({
+        el: &quot;#app&quot;,
+        data() {
+          return {
+            n: 1,
+          };
+        },
+        //局部定义自定义指令
+        directives: {
+          //自定义了一个v-big的自定义指令
+          big(Element, binding) {
+          	//Element为h3节点，binding.value为传入的值n
+            Element.innerText = binding.value * 10;
+          },
+        },
+      });
+    &lt;/script&gt;
+  &lt;/body&gt;
+</code></pre>
+<ul>
+<li>执行结果如下：<br>
+<img src="https://img-blog.csdnimg.cn/8bf8f81e97be42998aba416fc1f6a388.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA56u56IuT5Li_,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述" loading="lazy"></li>
+</ul>
+<blockquote>
+<p>关于上面代码的几个疑问：<br>
+1.directives是什么？<br>
+directives是vue为我们提供的一个自定义指令的对象，类似于methods，watch，<br>
+2.自定义指令名称写什么？<br>
+我们定义的指令名称为v-big，即下面就用big来创建函数<br>
+3.big函数传入的参数是什么？<br>
+第一个参数为当前绑定自定义指令的dom节点，第二个参数为一个对象：<br>
+<img src="https://img-blog.csdnimg.cn/a524586dd42a4265a1bec7652cccf0c3.png" alt="" loading="lazy"><br>
+我们只要关注他的value值即可，他的value值就是自定义指令传入的值n<br>
+4.big函数什么时候被调用：<br>
+当vue模板被重新解析时就会调用big函数</p>
+</blockquote>
+<h3 id="4全局注册实现小案例">4.全局注册实现小案例</h3>
+<pre><code class="language-javascript"> &lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;
+      &lt;h3 v-big=&quot;n&quot;&gt;{{n}}&lt;/h3&gt;
+      &lt;button @click=&quot;n++&quot;&gt;点我n++&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+    //全局注册了一个v-big的自定义指令
+     Vue.directive('big',(Element,binding)=&gt;{
+        Element.innerText = binding.value * 10;
+      })
+      new Vue({
+        el: &quot;#app&quot;,
+        data() {
+          return {
+            n: 1,
+          };
+        },
+      });
+    &lt;/script&gt;
+  &lt;/body&gt;
+</code></pre>
+<p>运行截图和上面一样，就不演示了。</p>
+<ul>
+<li>注意全局注册为directive而不是directives，没有s。</li>
+</ul>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://2921455327.github.io/post/javascript-zhong-this-de-zhi-xiang-wen-ti/">
+                  <h3 class="post-title">
+                    JavaScript中this的指向问题
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '5ec435a980c7ee73d2f9',
+        clientSecret: 'a2610f00cf74db074036f78f208af0a484148d48',
+        repo: '2921455327.github.io',
+        owner: '2921455327',
+        admin: ['2921455327'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

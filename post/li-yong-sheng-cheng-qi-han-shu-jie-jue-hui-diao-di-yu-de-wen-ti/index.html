@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>正则表达式的用途 | syz&#39;sinfo</title>
+<title>利用生成器函数解决回调地狱的问题 | syz&#39;sinfo</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,13 +24,13 @@
 
 
 
-    <meta name="description" content="0.判断特定字符串
-
-要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:
-
-&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
-const value = /[a-zA-Z\_\$][0-9a-zA..." />
-    <meta name="keywords" content="正则表达式" />
+    <meta name="description" content="需求：1秒后控制台输出111，然后2秒后输出222，然后三秒后输出333
+原始做法
+setTimeout(() =&gt; {
+    console.log(111);
+    setTimeout(() =&gt; {
+        ..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -101,80 +101,64 @@ const value = /[a-zA-Z\_\$][0-9a-zA..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">正则表达式的用途</h2>
-            <div class="post-date">2022-03-12</div>
+            <h2 class="post-title">利用生成器函数解决回调地狱的问题</h2>
+            <div class="post-date">2022-04-02</div>
             
             <div class="post-content" v-pre>
-              <h2 id="0判断特定字符串">0.判断特定字符串</h2>
-<blockquote>
-<p>要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:</p>
-</blockquote>
-<pre><code>&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
-const value = /[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-value.test(v)
-- test
-&gt;&gt;&gt; var value=/[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-&gt;&gt;&gt; value.test('v')
-// true
+              <p>需求：1秒后控制台输出111，然后2秒后输出222，然后三秒后输出333</p>
+<h3 id="原始做法">原始做法</h3>
+<pre><code class="language-javascript">setTimeout(() =&gt; {
+    console.log(111);
+    setTimeout(() =&gt; {
+        console.log(222);
+        setTimeout(() =&gt; {
+            console.log(333);
+        }, 3000);
+    }, 2000);
+}, 1000);
 </code></pre>
-<h2 id="1切割字符串">1.切割字符串</h2>
 <blockquote>
-<p>在读取用户的输入的多个数据时，数据间的分隔符可能是多种多样的，有的人用一个空格，有个人用多个空格，有个人用逗号顿号分号等，而我们读取的是一整个的字符串，如何把这个字符串拆分为一个一个的数据项呢，此时正则就可以上场了</p>
+<p>这只是三层嵌套，想象一下，如果有100层，这样的代码不仅臃肿，还不利于后期的管理<br>
+下面用生成器函数解决一下这个问题：</p>
 </blockquote>
-<pre><code>const reg=/[\s\,\、\。\,]+/
-const data=dataInput.split(reg)
-- test
-&gt;&gt;&gt; var reeg=/[\s\,\、\。\,]+/
-&gt;&gt;&gt; dataInput= &quot;A man, a plan, a canal: Panama&quot;
-// A man, a plan, a canal: Panama'
-&gt;&gt;&gt; dataInput.split(reeg)
-// ['A', 'man', 'a', 'plan', 'a', 'canal:', 'Panama']
+<h3 id="生成器函数做法">生成器函数做法</h3>
+<pre><code class="language-javascript">function one(){
+    setTimeout(() =&gt; {
+        console.log(111);
+        result.next()
+    }, 1000);
+}
+function two(){
+    setTimeout(() =&gt; {
+        console.log(222);
+        result.next()
+    }, 2000);
+}
+function three(){
+    setTimeout(() =&gt; {
+        console.log(333);
+    }, 3000);
+}
+function * gen(){
+    yield one()
+    yield two()
+    yield three()
+}
+let result = gen()
+result.next()
 </code></pre>
-<p>这样写，程序的容错性就会明显提升很多</p>
-<h2 id="2提取字符串信息">2.提取字符串信息</h2>
-<blockquote>
-<p>使用exec方法最终得到的是一个数组，里面存放字符串中与正则表达式中匹配的内容，我们可以通过这种方法便捷的提取字符串中的内容</p>
-</blockquote>
-<pre><code>const re = /^(\d+)(0*)$/;
-re.exec('12300')  
-const reg = /^(\d+?)(0*)$/;
-reg.exec('12300')
-- test
-&gt;&gt;&gt; const re = /^(\d+)(0*)$/;
-&gt;&gt;&gt; re.exec('12300')
-// ['12300', '12300', '', index: 0, input: '12300', groups: undefined]
-&gt;&gt;&gt; const reg = /^(\d+?)(0*)$/;
-&gt;&gt;&gt; reg.exec('12300')
-// ['12300', '123', '00', index: 0, input: '12300', groups: undefined]
-</code></pre>
-<h2 id="3替换字符串">3.替换字符串</h2>
-<blockquote>
-<p>使用string对象的replace方法可以对字符串中的某一部分进行替换，使用正则字符串后，可以方便的选择字符串中的特定字符，如显示客户信息时要将字符串中的金额数字替换为&quot;*&quot;</p>
-</blockquote>
-<pre><code>str.replace(/\d+/,&quot;*&quot;);
-- test
-&gt;&gt;&gt;str = &quot;$1&quot;
-// '$1'
-&gt;&gt;&gt;str.replace(/\d+/g,&quot;*&quot;)
-// '$*'
-</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/8c81251b202949488d7693f12152c053.gif" alt="在这里插入图片描述" loading="lazy"></figure>
+<p>如果对生成器函数有不懂的小伙伴，可以看下我上一篇博客：ES6新特性：生成器函数<br>
+附上原文地址：<a href="https://blog.csdn.net/weixin_58498354/article/details/123645132">生成器函数</a></p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://2921455327.github.io/tag/_r9OxAILb/" class="tag">
-                    正则表达式
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://2921455327.github.io/post/html-yu-fa/">
+                <a href="https://2921455327.github.io/post/es6-xin-te-xing-sheng-cheng-qi-han-shu/">
                   <h3 class="post-title">
-                    HTML语法
+                    ES6新特性：生成器函数
                   </h3>
                 </a>
               </div>

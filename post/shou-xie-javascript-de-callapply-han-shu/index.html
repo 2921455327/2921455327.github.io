@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>手写JavaScript的call，apply函数 | syz&#39;sinfo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1648869173796">
+<link rel="stylesheet" href="https://2921455327.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="apply和call函数的使用和区别
+
+转换调用函数this的指向，将调用者的this指向传入的对象
+
+
+在只传入this指向的对象而不传参的情况下,apply和call使用基本一致
+如果不传入对象，默认传入的对象为window对象
+
+//..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://2921455327.github.io">
+        <img src="https://2921455327.github.io/images/avatar.png?v=1648869173796" class="site-logo">
+        <h1 class="site-title">syz&#39;sinfo</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://2921455327.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">手写JavaScript的call，apply函数</h2>
+            <div class="post-date">2022-04-02</div>
+            
+            <div class="post-content" v-pre>
+              <h4 id="apply和call函数的使用和区别">apply和call函数的使用和区别</h4>
+<blockquote>
+<p>转换调用函数this的指向，将调用者的this指向传入的对象</p>
+</blockquote>
+<ul>
+<li>在只传入this指向的对象而不传参的情况下,apply和call使用基本一致</li>
+<li>如果不传入对象，默认传入的对象为window对象</li>
+</ul>
+<pre><code class="language-javascript">//call的使用
+  function name() {
+ 		//此时this指向call函数传入的对象
+        console.log(this);
+      }
+   let dog = {
+       	name: &quot;旺财&quot;,
+    };
+   name.call(dog);//{ name: '旺财' }
+//apply的使用
+function name() {
+		//此时this指向apply函数传入的对象
+        console.log(this);
+      }
+   let dog = {
+       	name: &quot;旺财&quot;,
+    };
+   name.apply(dog);//{ name: '旺财' }
+</code></pre>
+<ul>
+<li>apply,call还可以给调用函数传参，apply传入的是一个数组形式，call传入的是单个并列的参数形式</li>
+</ul>
+<pre><code class="language-javascript"> function name(age1,age2) {
+        console.log('我是'+this.name+',我今年'+age1+'岁了'+',我明年'+age2+'岁了');
+      }
+      let dog = {
+        name: &quot;旺财&quot;,
+      };
+   //call
+      name.call(dog,12,13);//我是旺财,我今年12岁了,我明年13岁了
+   //apply
+      name.apply(dog,[12,13])//我是旺财,我今年12岁了,我明年13岁了
+</code></pre>
+<h4 id="手写call函数">手写call函数</h4>
+<pre><code class="language-javascript"> Function.prototype._call = function(obj,...args){
+            obj = obj || window
+            //创建符号对象
+            const fn = Symbol();
+            //此处的this指向调用call的函数，相当于给新创建的对象加了一个属性，属性值为调用call的函数，此时函数的this指向已经指向了这个对象
+            obj[fn] = this
+            //传参
+            let res = obj[fn](...args)
+            //解除this的引用，避免一些效率上的问题
+            delete obj[fn]
+            return res
+        }
+       //测试
+      function name(age1,age2) {
+        console.log('我是'+this.name+',我今年'+age1+'岁了'+',我明年'+age2+'岁了');
+      }
+      let dog = {
+        name: &quot;旺财&quot;,
+      };
+      name._call(dog,12,13);//我是旺财,我今年12岁了,我明年13岁了
+</code></pre>
+<h4 id="手写apply函数">手写apply函数</h4>
+<ul>
+<li>apply和call函数只在传入参数时不太一样，其他部分完全一致</li>
+</ul>
+<pre><code class="language-javascript">	//	因为apply传入的是一个数组，所以要用args接收这个数组
+Function.prototype._apply = function(obj,args){
+            obj = obj || window
+            const fn = Symbol();
+            obj[fn] = this
+            console.log(...args);
+            //利用解构赋值，将传入的数组解构，传入调用apply的函数中
+            let res = obj[fn](...args)
+            delete obj[fn]
+            return res
+        }
+      function name(age1,age2) {
+        console.log('我是'+this.name+',我今年'+age1+'岁了'+',我明年'+age2+'岁了');
+      }
+      let dog = {
+        name: &quot;旺财&quot;,
+      };
+      name._apply(dog,12,13);//我是旺财,我今年12岁了,我明年13岁了
+</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://2921455327.github.io/post/css-xuan-ze-qi-chong-lei-yi-ji-you-xian-ji/">
+                  <h3 class="post-title">
+                    Css选择器种类以及优先级
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '5ec435a980c7ee73d2f9',
+        clientSecret: 'a2610f00cf74db074036f78f208af0a484148d48',
+        repo: '2921455327.github.io',
+        owner: '2921455327',
+        admin: ['2921455327'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>ES6新特性：生成器函数 | syz&#39;sinfo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1648869173796">
+<link rel="stylesheet" href="https://2921455327.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="定义生成器函数
+生成器函数和普通函数定义没有太大的差别，只是函数名前面多了一个*
+function * gen(){
+	console.log(111)
+}
+
+执行生成器函数
+生成器函数直接调用函数不会执行，需要调用生成器函数内部的next..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://2921455327.github.io">
+        <img src="https://2921455327.github.io/images/avatar.png?v=1648869173796" class="site-logo">
+        <h1 class="site-title">syz&#39;sinfo</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://2921455327.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">ES6新特性：生成器函数</h2>
+            <div class="post-date">2022-04-02</div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="定义生成器函数">定义生成器函数</h3>
+<p>生成器函数和普通函数定义没有太大的差别，只是函数名前面多了一个*</p>
+<pre><code class="language-javascript">function * gen(){
+	console.log(111)
+}
+</code></pre>
+<h3 id="执行生成器函数">执行生成器函数</h3>
+<p>生成器函数直接调用函数不会执行，需要调用生成器函数内部的next方法函数才会执行</p>
+<pre><code class="language-javascript">function * gen(){
+	console.log(111)
+}
+let result = gen()
+result.next()
+//输出111
+</code></pre>
+<h3 id="yield语句">yield语句</h3>
+<p>yield语句会把函数分为几个部分，然后调用next函数异步去执行</p>
+<pre><code class="language-javascript">function * gen(){
+	console.log(111)
+    yield one()
+    console.log(222)
+    yield two()
+    console.log(333)
+    yield three()
+    console.log(444)
+}
+let result = gen()
+result.next()
+result.next()
+result.next()
+result.next()
+</code></pre>
+<p>上诉yield语句把函数分为4个部分<br>
+第一部分为</p>
+<pre><code class="language-javascript">console.log(111)
+    yield one()
+</code></pre>
+<p>第二部分为</p>
+<pre><code class="language-javascript">console.log(222)
+    yield two()
+</code></pre>
+<p>第三部分为</p>
+<pre><code class="language-javascript">console.log(333)
+ 	yield three()
+</code></pre>
+<p>第四部分为</p>
+<pre><code class="language-javascript">console.log(444)
+</code></pre>
+<h4 id="yield语句的返回值">yield语句的返回值：</h4>
+<p>生成器函数执行之后，yield语句内的值以对象的形式返回，value中对应着yield语句中的值，done：代表着这个函数的异步任务是否走到结尾，false（没有走到结尾），true（走到了结尾）</p>
+<h3 id="生成器函数的传参问题">生成器函数的传参问题</h3>
+<ul>
+<li>第一次调用生成器函数时的传参，为生成器的形参<br>
+下面代码中的实参AAA对应着形参args</li>
+<li>第二个next传入的实参对应第一个yield语句的返回值<br>
+下面代码中的实参CCC对应的第一个yield语句的返回值aaa</li>
+<li>第三个next传入的实参对应第二个yield语句的返回值<br>
+下面代码中的实参DDD对应的第一个yield语句的返回值bbb</li>
+<li>第四个next传入的实参对应第三个yield语句的返回值<br>
+下面代码中的实参EEE对应的第一个yield语句的返回值ccc</li>
+</ul>
+<pre><code class="language-javascript">function * gen(args){
+    console.log(args);
+    let aaa =  yield '111'
+    console.log(aaa);
+    let bbb = yield '222'
+    console.log(bbb);
+    let ccc = yield '333'
+    console.log(ccc);
+}
+
+gen函数的传参和调用问题
+let result = gen('AAA')
+//做为前一个yield整体的返回结果
+console.log(result.next());
+console.log(result.next('CCC'));
+console.log(result.next('DDD'));
+console.log(result.next('EEE'));
+//输出结果
+//AAA
+//{ value: '111', done: false }
+//CCC
+//{ value: '222', done: false }
+//DDD
+//{ value: '333', done: false }
+//EEE
+//{ value: undefined, done: true }
+</code></pre>
+<p>讲完啦<br>
+<img src="https://img-blog.csdnimg.cn/6427eaf32e0341e890a9e350be47f9d6.gif" alt="在这里插入图片描述" loading="lazy"></p>
+<p>谢谢大家的观看<br>
+关于生成器函数的一个扩展：<br>
+<a href="https://blog.csdn.net/weixin_58498354/article/details/123644862?spm=1001.2014.3001.5502">利用生成器函数解决回调地狱的问题</a></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://2921455327.github.io/post/vue-zhong-ru-he-zi-ding-yi-zhi-ling/">
+                  <h3 class="post-title">
+                    Vue中如何自定义指令
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '5ec435a980c7ee73d2f9',
+        clientSecret: 'a2610f00cf74db074036f78f208af0a484148d48',
+        repo: '2921455327.github.io',
+        owner: '2921455327',
+        admin: ['2921455327'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

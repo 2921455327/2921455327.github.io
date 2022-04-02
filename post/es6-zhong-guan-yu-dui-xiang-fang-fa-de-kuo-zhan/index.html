@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Es6中关于对象方法的扩展 | syz&#39;sinfo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://2921455327.github.io/favicon.ico?v=1648869173796">
+<link rel="stylesheet" href="https://2921455327.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Object.is()
+
+这个方法与===很像，但同时也考虑到了边界情形。这个方法必须接收两个参数：
+主要用于判断两个对象是否相等，但和'===有一些不一样的地方
+
+console.log(Object.is(true, 1)); // f..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://2921455327.github.io">
+        <img src="https://2921455327.github.io/images/avatar.png?v=1648869173796" class="site-logo">
+        <h1 class="site-title">syz&#39;sinfo</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://2921455327.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Es6中关于对象方法的扩展</h2>
+            <div class="post-date">2022-04-02</div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="objectis">Object.is()</h3>
+<blockquote>
+<p>这个方法与===很像，但同时也考虑到了边界情形。这个方法必须接收两个参数：<br>
+主要用于判断两个对象是否相等，但和'===有一些不一样的地方</p>
+</blockquote>
+<pre><code class="language-javascript">console.log(Object.is(true, 1)); // false 
+console.log(Object.is({}, {})); // false 
+console.log(Object.is(&quot;2&quot;, 2)); // false 
+// 正确的 0、-0、+0 相等/不等判定
+console.log(Object.is(+0, -0)); // false 
+console.log(Object.is(+0, 0)); // true 
+console.log(Object.is(-0, 0)); // false 
+// 正确的 NaN 相等判定
+console.log(Object.is(NaN, NaN)); // true 
+//要检查超过两个值，递归地利用相等性传递即可：
+function recursivelyCheckEqual(num, ...test) { 
+ return Object.is(num, test[0]) &amp;&amp; 
+ (test.length &lt; 2 || recursivelyCheckEqual(...test)); 
+}
+</code></pre>
+<h3 id="objectassign">Object.assign()</h3>
+<blockquote>
+<p>ECMAScript 6 专门为合并对象提供了 Object.assign()方法。这个方法接收一个目标对象和一个<br>
+或多个源对象作为参数</p>
+</blockquote>
+<pre><code class="language-javascript">const student={
+    name:'syz',
+    age:18,
+    aaa:'1111'
+}
+const student1={
+    name:'zs',
+    age:36,
+    bbb:'1111'
+}
+//后面的会覆盖前面的重名属性和方法
+console.log(Object.assign(student,student1));//{ name: 'zs', age: 36, aaa: '1111', bbb: '1111' }
+</code></pre>
+<ul>
+<li>注意：后面传入的参数会覆盖前面的重名属性和方法</li>
+</ul>
+<h3 id="objectkeys">Object.keys()</h3>
+<blockquote>
+<p>获取对象所有的键,返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.keys(obj));//[ 'a', 'cities' ]
+</code></pre>
+<h3 id="objectvalues">Object.values()</h3>
+<blockquote>
+<p>获取对象的所有值，返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj1={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.values(obj1));//[ '1', [ 'a', 'b', 'c' ] ]
+</code></pre>
+<h3 id="objectentries">Object.entries()</h3>
+<blockquote>
+<p>获取对象的键和值，返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj1={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.entries(obj1))//[ [ 'a', '1' ], [ 'cities', [ 'a', 'b', 'c' ] ] ]
+</code></pre>
+<h3 id="objectsetprototypeof">Object.setPrototypeOf()</h3>
+<blockquote>
+<p>为一个对象设置它的原型对象</p>
+</blockquote>
+<pre><code class="language-javascript">const person = {
+    dosth:&quot;play lol&quot;
+}
+const animal={
+    attr:['eat','drink']
+}
+Object.setPrototypeOf(person,animal)
+console.log(person.__proto__.attr[0]);//eat
+</code></pre>
+<h3 id="objectgetownpropertydescriptors">Object.getOwnPropertyDescriptors()</h3>
+<blockquote>
+<p>获取对象的描述信息，返回一个数组</p>
+</blockquote>
+<pre><code class="language-javascript">let obj1={
+    a:&quot;1&quot;,
+    cities:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+}
+console.log(Object.getOwnPropertyDescriptors(obj1));
+//输出：
+/*
+{
+  a: { value: '1', writable: true, enumerable: true, configurable: true },
+  cities: {
+    value: [ 'a', 'b', 'c' ],//值
+    writable: true,//该值是否可以被修改
+    enumerable: true,//是否可以被枚举
+    configurable: true,//是否可以被删除
+  }
+}
+*/
+</code></pre>
+<h3 id="objectdefineproperty">Object.defineProperty()</h3>
+<blockquote>
+<p>创建对象的值和描述信息的函数（传一个值）</p>
+</blockquote>
+<pre><code class="language-javascript">const student = {
+  name: &quot;小明&quot;,
+  age: 19,
+  [Symbol(&quot;level&quot;)]: &quot;优秀&quot;,
+};
+Object.defineProperty(student, &quot;gender&quot;, {
+  value: &quot;男&quot;, //值
+  writable: true, //是否可修改的
+  enumerable: true, //是否可以枚举的
+  configurable: true, //是否可以删除的
+});
+console.log(student)//{ name: '小明', age: 19, gender: '男', [Symbol(level)]: '优秀' }
+</code></pre>
+<h3 id="objectdefineproperties">Object.defineProperties()</h3>
+<blockquote>
+<p>创建对象的值和描述信息的函数（传多个值）</p>
+</blockquote>
+<pre><code class="language-javascript">const student = {
+  name: &quot;小明&quot;,
+  age: 19,
+  [Symbol(&quot;level&quot;)]: &quot;优秀&quot;,
+};
+Object.defineProperties(student,{
+    id:{
+      value:'001',
+      writable: true, //是否可修改的
+      enumerable: true, //是否可以枚举的
+    },
+    sex:{
+      value:'男',
+      writable: true, //是否可修改的
+      enumerable: true, //是否可以枚举的
+      configurable: true, //是否可以删除的
+    }
+})
+console.log(student)//{name: '小明', age: 19, id: '001', sex: '男', Symbol(level): '优秀'}
+</code></pre>
+<ul>
+<li>如果用上述方法创建，描述对象的属性值默认为false</li>
+</ul>
+<p>确定不点个赞再走嘛？<br>
+<img src="https://img-blog.csdnimg.cn/05dd78aff484422086f155e4a23fb1e7.gif" alt="在这里插入图片描述" loading="lazy"></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://2921455327.github.io/post/li-yong-sheng-cheng-qi-han-shu-jie-jue-hui-diao-di-yu-de-wen-ti/">
+                  <h3 class="post-title">
+                    利用生成器函数解决回调地狱的问题
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '5ec435a980c7ee73d2f9',
+        clientSecret: 'a2610f00cf74db074036f78f208af0a484148d48',
+        repo: '2921455327.github.io',
+        owner: '2921455327',
+        admin: ['2921455327'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

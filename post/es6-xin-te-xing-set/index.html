@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>正则表达式的用途 | syz&#39;sinfo</title>
+<title>Es6新特性：set | syz&#39;sinfo</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,13 +24,12 @@
 
 
 
-    <meta name="description" content="0.判断特定字符串
+    <meta name="description" content="1.set的一些重要的特性
 
-要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:
-
-&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
-const value = /[a-zA-Z\_\$][0-9a-zA..." />
-    <meta name="keywords" content="正则表达式" />
+(1)Set.prototype.constructor，构造函数，默认是set函数
+(2)Set.prototype.size,返回set实例的成员总数
+(3)set是一种数据结构，是伪数组，无法访问长度，可..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -101,80 +100,96 @@ const value = /[a-zA-Z\_\$][0-9a-zA..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">正则表达式的用途</h2>
-            <div class="post-date">2022-03-12</div>
+            <h2 class="post-title">Es6新特性：set</h2>
+            <div class="post-date">2022-04-02</div>
             
             <div class="post-content" v-pre>
-              <h2 id="0判断特定字符串">0.判断特定字符串</h2>
+              <h2 id="1set的一些重要的特性">1.set的一些重要的特性</h2>
 <blockquote>
-<p>要检验某一字符串是否符合特定的格式，最方便的方式就是正则表达式:</p>
+<p>(1)Set.prototype.constructor，构造函数，默认是set函数<br>
+(2)Set.prototype.size,返回set实例的成员总数<br>
+(3)set是一种数据结构，是伪数组，无法访问长度，可以Array.from方法可以将set结构转化数组，再访问它的长度；<br>
+(4)set里面的原始值不允许重复，let set = new Set([1,2,3,1,2,3])，此时set为[1,2,3]<br>
+(5)set里面添加的对象即使相同也是不相等的，例如：set.add({a:1});  set.add({a:1});   可以同时存在；</p>
 </blockquote>
-<pre><code>&lt;!-- 判断变量是否符合命名规则，v是要进行判断的变量名 --&gt;
-const value = /[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-value.test(v)
-- test
-&gt;&gt;&gt; var value=/[a-zA-Z\_\$][0-9a-zA-Z\_\$]*/;
-&gt;&gt;&gt; value.test('v')
-// true
+<h2 id="2set的四种操作方法">2.set的四种操作方法：</h2>
+<pre><code class="language-javascript">    // 添加元素
+            add(value),用于向数组中添加元素，返回set结构本身；
+            set.add(11112);
+        //删除元素
+            delete(value),删除元素，返回一个bool值，表示是否删除成功；
+            set.delete(23);
+        //是否存在某个元素
+            has(value),返回一个bool值表示set中是否含有本元素；
+            set.has(13);
+            console.log(set.has(13));
+        //清除所有成员
+            clear(),清除所有的set成员，没有返回值；
+            set.clear();
+            console.log(set);
 </code></pre>
-<h2 id="1切割字符串">1.切割字符串</h2>
+<h2 id="3set的遍历方法">3.set的遍历方法</h2>
 <blockquote>
-<p>在读取用户的输入的多个数据时，数据间的分隔符可能是多种多样的，有的人用一个空格，有个人用多个空格，有个人用逗号顿号分号等，而我们读取的是一整个的字符串，如何把这个字符串拆分为一个一个的数据项呢，此时正则就可以上场了</p>
+<p>Set 会维护值插入时的顺序，因此支持按顺序迭代。<br>
+集合实例可以提供一个迭代器（Iterator），能以插入顺序生成集合内容。可以通过 values()方<br>
+法及其别名方法 keys()（或者 Symbol.iterator 属性，它引用 values()）取得这个迭代器：</p>
 </blockquote>
-<pre><code>const reg=/[\s\,\、\。\,]+/
-const data=dataInput.split(reg)
-- test
-&gt;&gt;&gt; var reeg=/[\s\,\、\。\,]+/
-&gt;&gt;&gt; dataInput= &quot;A man, a plan, a canal: Panama&quot;
-// A man, a plan, a canal: Panama'
-&gt;&gt;&gt; dataInput.split(reeg)
-// ['A', 'man', 'a', 'plan', 'a', 'canal:', 'Panama']
-</code></pre>
-<p>这样写，程序的容错性就会明显提升很多</p>
-<h2 id="2提取字符串信息">2.提取字符串信息</h2>
-<blockquote>
-<p>使用exec方法最终得到的是一个数组，里面存放字符串中与正则表达式中匹配的内容，我们可以通过这种方法便捷的提取字符串中的内容</p>
-</blockquote>
-<pre><code>const re = /^(\d+)(0*)$/;
-re.exec('12300')  
-const reg = /^(\d+?)(0*)$/;
-reg.exec('12300')
-- test
-&gt;&gt;&gt; const re = /^(\d+)(0*)$/;
-&gt;&gt;&gt; re.exec('12300')
-// ['12300', '12300', '', index: 0, input: '12300', groups: undefined]
-&gt;&gt;&gt; const reg = /^(\d+?)(0*)$/;
-&gt;&gt;&gt; reg.exec('12300')
-// ['12300', '123', '00', index: 0, input: '12300', groups: undefined]
-</code></pre>
-<h2 id="3替换字符串">3.替换字符串</h2>
-<blockquote>
-<p>使用string对象的replace方法可以对字符串中的某一部分进行替换，使用正则字符串后，可以方便的选择字符串中的特定字符，如显示客户信息时要将字符串中的金额数字替换为&quot;*&quot;</p>
-</blockquote>
-<pre><code>str.replace(/\d+/,&quot;*&quot;);
-- test
-&gt;&gt;&gt;str = &quot;$1&quot;
-// '$1'
-&gt;&gt;&gt;str.replace(/\d+/g,&quot;*&quot;)
-// '$*'
+<pre><code class="language-javascript">			console.log(set1.keys==set1[Symbol.iterator]);//true
+			console.log(set1.values==set1[Symbol.iterator]);//true
+        //1.
+			 let set1 = new Set(['喵喵','旺旺','啾啾']);
+			 for(let key of set1.keys()){
+			     console.log(key);
+			 }
+	 	//output:
+			 //喵喵
+			 //旺旺
+			 //啾啾
+		//2.
+			 for(let value of set1.values()){
+			     console.log(value);
+			 }
+		//output:
+			 //喵喵
+			 //旺旺
+			 //啾啾
+		//3.
+			 for (let value of set1[Symbol.iterator]()) { 
+			 	 console.log(value); 
+			}
+		//output:
+			 //喵喵
+			 //旺旺
+			 //啾啾
+		//4.
+			 for(let item of set1.entries()){
+			     console.log(item);
+			 }
+	 	//output:
+			//[ '喵喵', '喵喵' ]
+			//[ '旺旺', '旺旺' ]
+			//[ '啾啾', '啾啾' ]
+        //5.
+            let myArr = new Set([1,2,3,4,5]);
+            for(let x of myArr){
+                console.log(x);
+            }
+       	//output:
+       		//1
+       		//2
+       		//3
+       		//4
+       		//5
 </code></pre>
 
             </div>
             
-              <div class="tag-container">
-                
-                  <a href="https://2921455327.github.io/tag/_r9OxAILb/" class="tag">
-                    正则表达式
-                  </a>
-                
-              </div>
-            
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://2921455327.github.io/post/html-yu-fa/">
+                <a href="https://2921455327.github.io/post/zheng-ze-biao-da-shi-de-yong-tu/">
                   <h3 class="post-title">
-                    HTML语法
+                    正则表达式的用途
                   </h3>
                 </a>
               </div>
