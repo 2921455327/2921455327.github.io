@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://2921455327.github.io</id>
+    <id>http://localhost:4000</id>
     <title>syz&apos;sinfo</title>
-    <updated>2022-04-02T07:55:25.381Z</updated>
+    <updated>2022-04-02T11:13:54.872Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://2921455327.github.io"/>
-    <link rel="self" href="https://2921455327.github.io/atom.xml"/>
+    <link rel="alternate" href="http://localhost:4000"/>
+    <link rel="self" href="http://localhost:4000/atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>https://2921455327.github.io/images/avatar.png</logo>
-    <icon>https://2921455327.github.io/favicon.ico</icon>
+    <logo>http://localhost:4000/images/avatar.png</logo>
+    <icon>http://localhost:4000/favicon.ico</icon>
     <rights>All rights reserved 2022, syz&apos;sinfo</rights>
     <entry>
         <title type="html"><![CDATA[手写JavaScript的call，apply函数]]></title>
-        <id>https://2921455327.github.io/post/shou-xie-javascript-de-callapply-han-shu/</id>
-        <link href="https://2921455327.github.io/post/shou-xie-javascript-de-callapply-han-shu/">
+        <id>http://localhost:4000/post/shou-xie-javascript-de-callapply-han-shu/</id>
+        <link href="http://localhost:4000/post/shou-xie-javascript-de-callapply-han-shu/">
         </link>
         <updated>2022-04-02T03:10:36.000Z</updated>
         <content type="html"><![CDATA[<h4 id="apply和call函数的使用和区别">apply和call函数的使用和区别</h4>
@@ -106,8 +106,8 @@ Function.prototype._apply = function(obj,args){
     </entry>
     <entry>
         <title type="html"><![CDATA[Css选择器种类以及优先级]]></title>
-        <id>https://2921455327.github.io/post/css-xuan-ze-qi-chong-lei-yi-ji-you-xian-ji/</id>
-        <link href="https://2921455327.github.io/post/css-xuan-ze-qi-chong-lei-yi-ji-you-xian-ji/">
+        <id>http://localhost:4000/post/css-xuan-ze-qi-chong-lei-yi-ji-you-xian-ji/</id>
+        <link href="http://localhost:4000/post/css-xuan-ze-qi-chong-lei-yi-ji-you-xian-ji/">
         </link>
         <updated>2022-04-02T03:10:01.000Z</updated>
         <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
@@ -279,8 +279,8 @@ div:first-child == 1+10<br>
     </entry>
     <entry>
         <title type="html"><![CDATA[关于浏览器的本地存储]]></title>
-        <id>https://2921455327.github.io/post/guan-yu-liu-lan-qi-de-ben-di-cun-chu/</id>
-        <link href="https://2921455327.github.io/post/guan-yu-liu-lan-qi-de-ben-di-cun-chu/">
+        <id>http://localhost:4000/post/guan-yu-liu-lan-qi-de-ben-di-cun-chu/</id>
+        <link href="http://localhost:4000/post/guan-yu-liu-lan-qi-de-ben-di-cun-chu/">
         </link>
         <updated>2022-04-02T03:09:34.000Z</updated>
         <content type="html"><![CDATA[<h3 id="浏览器本地存储大小">浏览器本地存储大小</h3>
@@ -314,8 +314,8 @@ localStorage.clear()
     </entry>
     <entry>
         <title type="html"><![CDATA[JavaScript中关于字符串的操作方法]]></title>
-        <id>https://2921455327.github.io/post/javascript-zhong-guan-yu-zi-fu-chuan-de-cao-zuo-fang-fa/</id>
-        <link href="https://2921455327.github.io/post/javascript-zhong-guan-yu-zi-fu-chuan-de-cao-zuo-fang-fa/">
+        <id>http://localhost:4000/post/javascript-zhong-guan-yu-zi-fu-chuan-de-cao-zuo-fang-fa/</id>
+        <link href="http://localhost:4000/post/javascript-zhong-guan-yu-zi-fu-chuan-de-cao-zuo-fang-fa/">
         </link>
         <updated>2022-04-02T03:09:01.000Z</updated>
         <content type="html"><![CDATA[<h3 id="字符串的拼接concat">字符串的拼接：concat()</h3>
@@ -376,8 +376,8 @@ console.log(string.substr(3, -4)); // &quot;&quot; (empty string)
     </entry>
     <entry>
         <title type="html"><![CDATA[JavaScript中数组拼接的几种方式]]></title>
-        <id>https://2921455327.github.io/post/javascript-zhong-shu-zu-pin-jie-de-ji-chong-fang-shi/</id>
-        <link href="https://2921455327.github.io/post/javascript-zhong-shu-zu-pin-jie-de-ji-chong-fang-shi/">
+        <id>http://localhost:4000/post/javascript-zhong-shu-zu-pin-jie-de-ji-chong-fang-shi/</id>
+        <link href="http://localhost:4000/post/javascript-zhong-shu-zu-pin-jie-de-ji-chong-fang-shi/">
         </link>
         <updated>2022-04-02T03:08:31.000Z</updated>
         <content type="html"><![CDATA[<h3 id="concat方法拼接">concat()方法拼接</h3>
@@ -417,8 +417,8 @@ console.log(a);//[1,2,3,4,5,6,'喵喵','旺财','大黄']
     </entry>
     <entry>
         <title type="html"><![CDATA[Es6中关于对象方法的扩展]]></title>
-        <id>https://2921455327.github.io/post/es6-zhong-guan-yu-dui-xiang-fang-fa-de-kuo-zhan/</id>
-        <link href="https://2921455327.github.io/post/es6-zhong-guan-yu-dui-xiang-fang-fa-de-kuo-zhan/">
+        <id>http://localhost:4000/post/es6-zhong-guan-yu-dui-xiang-fang-fa-de-kuo-zhan/</id>
+        <link href="http://localhost:4000/post/es6-zhong-guan-yu-dui-xiang-fang-fa-de-kuo-zhan/">
         </link>
         <updated>2022-04-02T03:07:46.000Z</updated>
         <content type="html"><![CDATA[<h3 id="objectis">Object.is()</h3>
@@ -577,8 +577,8 @@ console.log(student)//{name: '小明', age: 19, id: '001', sex: '男', Symbol(le
     </entry>
     <entry>
         <title type="html"><![CDATA[利用生成器函数解决回调地狱的问题]]></title>
-        <id>https://2921455327.github.io/post/li-yong-sheng-cheng-qi-han-shu-jie-jue-hui-diao-di-yu-de-wen-ti/</id>
-        <link href="https://2921455327.github.io/post/li-yong-sheng-cheng-qi-han-shu-jie-jue-hui-diao-di-yu-de-wen-ti/">
+        <id>http://localhost:4000/post/li-yong-sheng-cheng-qi-han-shu-jie-jue-hui-diao-di-yu-de-wen-ti/</id>
+        <link href="http://localhost:4000/post/li-yong-sheng-cheng-qi-han-shu-jie-jue-hui-diao-di-yu-de-wen-ti/">
         </link>
         <updated>2022-04-02T03:07:17.000Z</updated>
         <content type="html"><![CDATA[<p>需求：1秒后控制台输出111，然后2秒后输出222，然后三秒后输出333</p>
@@ -630,8 +630,8 @@ result.next()
     </entry>
     <entry>
         <title type="html"><![CDATA[ES6新特性：生成器函数]]></title>
-        <id>https://2921455327.github.io/post/es6-xin-te-xing-sheng-cheng-qi-han-shu/</id>
-        <link href="https://2921455327.github.io/post/es6-xin-te-xing-sheng-cheng-qi-han-shu/">
+        <id>http://localhost:4000/post/es6-xin-te-xing-sheng-cheng-qi-han-shu/</id>
+        <link href="http://localhost:4000/post/es6-xin-te-xing-sheng-cheng-qi-han-shu/">
         </link>
         <updated>2022-04-02T03:06:39.000Z</updated>
         <content type="html"><![CDATA[<h3 id="定义生成器函数">定义生成器函数</h3>
@@ -731,8 +731,8 @@ console.log(result.next('EEE'));
     </entry>
     <entry>
         <title type="html"><![CDATA[Vue中如何自定义指令]]></title>
-        <id>https://2921455327.github.io/post/vue-zhong-ru-he-zi-ding-yi-zhi-ling/</id>
-        <link href="https://2921455327.github.io/post/vue-zhong-ru-he-zi-ding-yi-zhi-ling/">
+        <id>http://localhost:4000/post/vue-zhong-ru-he-zi-ding-yi-zhi-ling/</id>
+        <link href="http://localhost:4000/post/vue-zhong-ru-he-zi-ding-yi-zhi-ling/">
         </link>
         <updated>2022-04-02T03:06:04.000Z</updated>
         <content type="html"><![CDATA[<h3 id="1自定义指令的作用">1.自定义指令的作用</h3>
@@ -821,8 +821,8 @@ directives是vue为我们提供的一个自定义指令的对象，类似于meth
     </entry>
     <entry>
         <title type="html"><![CDATA[JavaScript中this的指向问题]]></title>
-        <id>https://2921455327.github.io/post/javascript-zhong-this-de-zhi-xiang-wen-ti/</id>
-        <link href="https://2921455327.github.io/post/javascript-zhong-this-de-zhi-xiang-wen-ti/">
+        <id>http://localhost:4000/post/javascript-zhong-this-de-zhi-xiang-wen-ti/</id>
+        <link href="http://localhost:4000/post/javascript-zhong-this-de-zhi-xiang-wen-ti/">
         </link>
         <updated>2022-04-02T03:05:25.000Z</updated>
         <content type="html"><![CDATA[<p><ul class="markdownIt-TOC">
