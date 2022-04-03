@@ -1241,14 +1241,14 @@ h3.serchedPreview {
 			}
 
 			.pagination-ul a:hover {
-				background-color: #817c7c !important;
+				background-color: #ff6b6b !important;
 				color: #ffffff !important;
-				box-shadow: 0 1px 4px 2px RGBA(129,124,124,0.9) !important;
+				box-shadow: 0 1px 4px 2px RGBA(255,107,107,0.9) !important;
 			}
 
 			.pagination-ul .pagination-active a{
 				color: #ffffff !important;
-				box-shadow: 0 1px 4px 2px RGBA(129,124,124,0.9) !important;
+				box-shadow: 0 1px 4px 2px RGBA(255,107,107,0.9) !important;
 			}
 
 			.sticky-top-flag {
@@ -1280,7 +1280,7 @@ h3.serchedPreview {
 
 			.row .post-row-container ,
 			#post-content-article .container .post-feature-header-image {
-				box-shadow: 0 3px 15px 2px #c1bcbc;;
+				box-shadow: 0 3px 15px 2px #495057;;
 			}
 			
          
